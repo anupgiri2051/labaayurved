@@ -3,46 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>धौलागिरी आयुर्वेद अस्पताल - Lab System</title>
+  <title>धौलागिरी आयुर्वेद अस्पताल - Lab System with Database</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
     
     body {
       font-family: 'Mukta', 'Plus Jakarta Sans', sans-serif;
       background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
     }
 
-    /* Glassmorphism Card Style */
     .glass-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
     }
 
-    /* Modern Focus Inputs */
     .res-input {
-      background-color: #f8fafc;
+      background-color: #f1f5f9;
       border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 3px 8px;
+      border-radius: 4px;
+      padding: 2px 6px;
       font-weight: 700;
       color: #0f172a;
-      transition: all 0.2s ease-in-out;
+      transition: all 0.15s ease-in-out;
       width: 100%;
+      font-size: 11px;
     }
     .res-input:focus {
       outline: none;
       background-color: #ffffff;
-      border-color: #ef4444;
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+      border-color: #dc2626;
+      box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25);
     }
 
-    /* Print Specific Style Optimization */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 6mm;
+        margin: 5mm;
       }
       .no-print { display: none !important; }
       body { 
@@ -78,31 +76,26 @@
   <div id="loginModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
     <div class="glass-card rounded-3xl shadow-2xl border border-white/20 p-8 w-full max-w-md relative overflow-hidden">
       
-      <!-- AI Glow Effect Background -->
-      <div class="absolute -top-10 -left-10 w-32 h-32 bg-red-500/20 rounded-full blur-2xl"></div>
-      <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl"></div>
-
       <div class="text-center mb-6 relative">
-        <!-- Official Emblem Logo in Login -->
         <div class="w-24 h-24 mx-auto mb-3 flex items-center justify-center filter drop-shadow-md">
           <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg" alt="Emblem of Nepal" class="w-full h-full object-contain">
         </div>
         <h2 class="text-2xl font-black text-slate-900 tracking-tight">धौलागिरी आयुर्वेद अस्पताल</h2>
-        <p class="text-xs text-red-600 font-bold uppercase tracking-widest mt-1">गण्डकी प्रदेश, बाग्लुङ | स्मार्ट ल्याब सिस्टम</p>
+        <p class="text-xs text-red-600 font-bold uppercase tracking-widest mt-1">गण्डकी प्रदेश, बाग्लुङ | स्मार्ट ल्याब प्रणाली</p>
       </div>
       
       <div id="loginError" class="hidden mb-4 p-3 bg-red-100 border border-red-300 text-red-700 text-xs rounded-xl text-center font-bold">
-        User ID वा Password मिलेन! (ID: manoj | Pass: bhusal)
+        User ID वा Password मिलेन! (ID: admin | Pass: admin123)
       </div>
 
       <form onsubmit="authenticate(event)" class="space-y-4 relative">
         <div>
           <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider">User ID</label>
-          <input type="text" id="userInput" class="w-full px-4 py-3 text-sm bg-slate-100/80 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition" placeholder="manoj" required>
+          <input type="text" id="userInput" class="w-full px-4 py-3 text-sm bg-slate-100/80 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition" placeholder="Enter User ID" required>
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider">Password</label>
-          <input type="password" id="passInput" class="w-full px-4 py-3 text-sm bg-slate-100/80 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition" placeholder="bhusal" required>
+          <input type="password" id="passInput" class="w-full px-4 py-3 text-sm bg-slate-100/80 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition" placeholder="Enter Password" required>
         </div>
         <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 rounded-xl text-sm shadow-lg shadow-red-500/30 transition transform hover:-translate-y-0.5">
           प्रणालीमा प्रवेश गर्नुहोस् (Login)
@@ -114,40 +107,44 @@
   <!-- ================= MAIN APP INTERFACE ================= -->
   <div id="appInterface" class="hidden w-full max-w-5xl">
     
-    <!-- Top Modern Action Bar -->
-    <div class="mb-4 no-print glass-card p-4 rounded-2xl shadow-xl flex flex-wrap justify-between items-center gap-3">
+    <!-- Top Action Bar -->
+    <div class="mb-4 no-print glass-card p-3.5 rounded-2xl shadow-xl flex flex-wrap justify-between items-center gap-3">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-gradient-to-tr from-red-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-extrabold text-sm shadow-md">MB</div>
+        <div class="w-9 h-9 bg-red-600 text-white rounded-xl flex items-center justify-center font-extrabold text-sm shadow-md">LAB</div>
         <div>
-          <h1 class="text-sm font-extrabold text-slate-900">Manoj Bhusal</h1>
-          <p class="text-[11px] text-slate-500 font-semibold">Lab Technician | धौलागिरी आयुर्वेद अस्पताल</p>
+          <h1 class="text-sm font-extrabold text-slate-900">Lab Technician Portal</h1>
+          <p class="text-[11px] text-slate-500 font-semibold">धौलागिरी आयुर्वेद अस्पताल - बाग्लुङ</p>
         </div>
       </div>
       <div class="flex items-center space-x-2">
+        <button onclick="saveRecord()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-md shadow-emerald-500/20 transition flex items-center space-x-1">
+          <span>💾 Save Record</span>
+        </button>
+        <button onclick="toggleRecordsModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-md shadow-blue-500/20 transition flex items-center space-x-1">
+          <span>📁 View Records</span>
+        </button>
         <button onclick="window.print()" class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-red-500/20 transition flex items-center space-x-1.5">
-          <span>🖨️ Print A4 Report</span>
+          <span>🖨️ Print</span>
         </button>
-        <button onclick="document.getElementById('reportForm').reset(); document.getElementById('techNameInput').value='Manoj Bhusal';" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3.5 py-2 rounded-xl text-xs transition">
-          Reset
+        <button onclick="document.getElementById('reportForm').reset(); setTodayDate();" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-2 rounded-xl text-xs transition">
+          Clear
         </button>
-        <button onclick="exitApp()" class="bg-slate-900 hover:bg-black text-white font-bold px-3.5 py-2 rounded-xl text-xs transition">
+        <button onclick="exitApp()" class="bg-slate-900 hover:bg-black text-white font-bold px-3 py-2 rounded-xl text-xs transition">
           Logout
         </button>
       </div>
     </div>
 
-    <!-- Printable Report Sheet (A4 Fit) -->
-    <div class="print-area glass-card border border-slate-200 shadow-2xl p-6 rounded-2xl text-[10.5px] leading-tight text-slate-900">
+    <!-- Printable Report Sheet -->
+    <div class="print-area glass-card border border-slate-200 shadow-2xl p-5 rounded-2xl text-[10.5px] leading-tight text-slate-900">
       
       <form id="reportForm">
         
         <!-- Hospital Header -->
-        <div class="border-b-2 border-red-600 pb-3 mb-3">
+        <div class="border-b-2 border-red-600 pb-2 mb-3">
           <div class="flex items-center justify-between">
-            
-            <!-- Official Emblem Logo in Header -->
             <div class="w-20 h-20 flex-shrink-0 flex items-center justify-center">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg" alt="Emblem of Nepal" class="w-full h-full object-contain drop-shadow">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg" alt="Emblem of Nepal" class="w-full h-full object-contain">
             </div>
 
             <div class="text-center flex-grow px-2">
@@ -165,114 +162,107 @@
         </div>
 
         <!-- Patient Info Grid -->
-        <div class="grid grid-cols-2 gap-x-6 gap-y-1.5 border border-slate-200 bg-slate-50/80 p-2.5 rounded-xl mb-3 text-[10.5px]">
-          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Name:</span><input type="text" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold"></div>
-          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Age/Sex:</span><input type="text" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold"></div>
-          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Address:</span><input type="text" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1"></div>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-1.5 border border-slate-300 bg-slate-50 p-2.5 rounded-xl mb-3 text-[10.5px]">
+          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Name:</span><input type="text" id="pName" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold" placeholder="Patient Full Name" required></div>
+          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Age/Sex:</span><input type="text" id="pAgeSex" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold" placeholder="e.g. 25/M"></div>
+          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Address:</span><input type="text" id="pAddress" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1" placeholder="Address"></div>
           <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Date:</span><input type="text" id="reportDate" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold"></div>
-          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Ref. By:</span><input type="text" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1"></div>
-          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Lab No.:</span><input type="text" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold"></div>
+          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Ref. By:</span><input type="text" id="pRefBy" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1" placeholder="Doctor's Name"></div>
+          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Lab No.:</span><input type="text" id="pLabNo" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold" placeholder="Lab ID" required></div>
         </div>
 
         <!-- Main Form Grid -->
         <div class="grid grid-cols-2 gap-3">
           
           <!-- LEFT COLUMN -->
-          <div class="space-y-2.5">
+          <div class="space-y-2">
             
-            <!-- HAEMATOLOGICAL TEST -->
-            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-200 text-center text-[10.5px]">HAEMATOLOGICAL TEST</div>
+            <div class="border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-300 text-center text-[10.5px]">HAEMATOLOGICAL TEST</div>
               <table class="w-full text-left border-collapse">
                 <tr class="bg-slate-100 text-[9px] border-b border-slate-200 font-bold"><th class="p-1 border-r">Parameters</th><th class="p-1 border-r w-24">Result</th><th class="p-1">Normal Value</th></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">WBC</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">4000-11000/uL</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">RBC</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">4.0-5.5x10⁶/uL</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">Platelets</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">1.5-4.0L/uL</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">WBC</td><td class="p-1 border-r"><input type="text" id="wbc" class="res-input"></td><td class="p-1 text-slate-500">4000-11000/uL</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">RBC</td><td class="p-1 border-r"><input type="text" id="rbc" class="res-input"></td><td class="p-1 text-slate-500">4.0-5.5x10⁶/uL</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">Platelets</td><td class="p-1 border-r"><input type="text" id="platelets" class="res-input"></td><td class="p-1 text-slate-500">1.5-4.0L/uL</td></tr>
                 <tr class="bg-slate-100 font-bold"><td colspan="3" class="p-1 border-y border-slate-200 text-slate-700">DIFFERENTIAL COUNT</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Neutrophil</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">45-75%</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Lymphocyte</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">20-45%</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Eosinophil</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">1-6%</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Monocyte</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">2-10%</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Basophil</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">0-1%</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r font-semibold">Hemoglobin</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">M=12-17, F=11-16</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">PCV / MCV</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">35-55% / 82-92%</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">ESR (wintrobe)</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">M=0-10, F=0-20</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r font-semibold">Blood Group/Rh</td><td class="p-1 border-r"><input type="text" class="res-input text-red-600 font-extrabold"></td><td class="p-1 text-slate-500">-</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Neutrophil</td><td class="p-1 border-r"><input type="text" id="neutrophil" class="res-input"></td><td class="p-1 text-slate-500">45-75%</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Lymphocyte</td><td class="p-1 border-r"><input type="text" id="lymphocyte" class="res-input"></td><td class="p-1 text-slate-500">20-45%</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Eosinophil</td><td class="p-1 border-r"><input type="text" id="eosinophil" class="res-input"></td><td class="p-1 text-slate-500">1-6%</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Monocyte</td><td class="p-1 border-r"><input type="text" id="monocyte" class="res-input"></td><td class="p-1 text-slate-500">2-10%</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">Basophil</td><td class="p-1 border-r"><input type="text" id="basophil" class="res-input"></td><td class="p-1 text-slate-500">0-1%</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r font-semibold">Hemoglobin</td><td class="p-1 border-r"><input type="text" id="hb" class="res-input"></td><td class="p-1 text-slate-500">M=12-17, F=11-16</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">PCV / MCV</td><td class="p-1 border-r"><input type="text" id="pcv_mcv" class="res-input"></td><td class="p-1 text-slate-500">35-55% / 82-92%</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">ESR (wintrobe)</td><td class="p-1 border-r"><input type="text" id="esr" class="res-input"></td><td class="p-1 text-slate-500">M=0-10, F=0-20</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r font-semibold">Blood Group/Rh</td><td class="p-1 border-r"><input type="text" id="bloodGroup" class="res-input text-red-600 font-extrabold"></td><td class="p-1 text-slate-500">-</td></tr>
               </table>
             </div>
 
-            <!-- BIOCHEMICAL TEST -->
-            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-200 text-center text-[10.5px]">BIOCHEMICAL TEST</div>
+            <div class="border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-300 text-center text-[10.5px]">BIOCHEMICAL TEST</div>
               <table class="w-full text-left border-collapse">
                 <tr class="bg-slate-100 text-[9px] border-b border-slate-200 font-bold"><th class="p-1 border-r">Parameters</th><th class="p-1 border-r w-24">Result</th><th class="p-1">Normal Value</th></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">B.Sugar (F)</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">60-110 mg/dl</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">B.Sugar (PP / R)</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">&lt;140 mg/dl</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">Urea / Creatinine</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">15-45 / 0.4-1.4</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">Sodium / Potassium</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">135-145 / 3.5-5.5</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">Bilirubin (Total)</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">0.4-1.2 mg/dl</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">SGOT / SGPT</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">10-40 U/L</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">Total Cholesterol</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">150-250 mg/dl</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">Triglyceride</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">35-170 mg/dl</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">Uric Acid</td><td class="p-1 border-r"><input type="text" class="res-input"></td><td class="p-1 text-slate-500">3.5-7.2 mg/dl</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">B.Sugar (F)</td><td class="p-1 border-r"><input type="text" id="sugarF" class="res-input"></td><td class="p-1 text-slate-500">60-110 mg/dl</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">B.Sugar (PP / R)</td><td class="p-1 border-r"><input type="text" id="sugarPP" class="res-input"></td><td class="p-1 text-slate-500">&lt;140 mg/dl</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">Urea / Creatinine</td><td class="p-1 border-r"><input type="text" id="ureaCreat" class="res-input"></td><td class="p-1 text-slate-500">15-45 / 0.4-1.4</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">Sodium / Potassium</td><td class="p-1 border-r"><input type="text" id="naK" class="res-input"></td><td class="p-1 text-slate-500">135-145 / 3.5-5.5</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">Bilirubin (Total)</td><td class="p-1 border-r"><input type="text" id="biliTotal" class="res-input"></td><td class="p-1 text-slate-500">0.4-1.2 mg/dl</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">SGOT / SGPT</td><td class="p-1 border-r"><input type="text" id="sgotSgpt" class="res-input"></td><td class="p-1 text-slate-500">10-40 U/L</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">Total Cholesterol</td><td class="p-1 border-r"><input type="text" id="cholesterol" class="res-input"></td><td class="p-1 text-slate-500">150-250 mg/dl</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">Triglyceride</td><td class="p-1 border-r"><input type="text" id="triglyceride" class="res-input"></td><td class="p-1 text-slate-500">35-170 mg/dl</td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">Uric Acid</td><td class="p-1 border-r"><input type="text" id="uricAcid" class="res-input"></td><td class="p-1 text-slate-500">3.5-7.2 mg/dl</td></tr>
               </table>
             </div>
 
-            <!-- MISCELLANEOUS -->
-            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-200 text-center text-[10.5px]">MISCELLANEOUS & SPUTUM</div>
+            <div class="border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-300 text-center text-[10.5px]">MISCELLANEOUS & SPUTUM</div>
               <div class="p-1.5 space-y-1 text-[9.5px]">
-                <div class="flex items-center"><span class="w-24 font-semibold">Mantoux Test:</span><input type="text" class="res-input"></div>
-                <div class="flex items-center"><span class="w-24 font-semibold">Sputum AFB:</span><input type="text" class="res-input"></div>
+                <div class="flex items-center"><span class="w-24 font-semibold">Mantoux Test:</span><input type="text" id="mantoux" class="res-input"></div>
+                <div class="flex items-center"><span class="w-24 font-semibold">Sputum AFB:</span><input type="text" id="afb" class="res-input"></div>
               </div>
             </div>
 
           </div>
 
           <!-- RIGHT COLUMN -->
-          <div class="space-y-2.5">
+          <div class="space-y-2">
             
-            <!-- SEROLOGY / IMMUNOLOGY TABLE -->
-            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-200 text-center text-[10.5px]">SEROLOGY / IMMUNOLOGY</div>
+            <div class="border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-300 text-center text-[10.5px]">SEROLOGY / IMMUNOLOGY</div>
               <table class="w-full text-left border-collapse text-[9.5px]">
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">HIV Ⅰ/Ⅱ | HBsAg</td><td class="p-1"><input type="text" class="res-input"></td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">HCV | VDRL/RPR</td><td class="p-1"><input type="text" class="res-input"></td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">RA Factor | CRP</td><td class="p-1"><input type="text" class="res-input"></td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">HIV Ⅰ/Ⅱ | HBsAg</td><td class="p-1"><input type="text" id="hivHbsag" class="res-input"></td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">HCV | VDRL/RPR</td><td class="p-1"><input type="text" id="hcvVdrl" class="res-input"></td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">RA Factor | CRP</td><td class="p-1"><input type="text" id="raCrp" class="res-input"></td></tr>
                 <tr class="bg-slate-100 font-bold"><td colspan="2" class="p-1 border-y border-slate-200 text-slate-700">Widal Test:</td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">S.Typhi 'O' / 'H'</td><td class="p-1"><input type="text" class="res-input"></td></tr>
-                <tr class="border-b border-slate-100"><td class="p-1 border-r">H. Pylori Test</td><td class="p-1"><input type="text" class="res-input"></td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r pl-2">S.Typhi 'O' / 'H'</td><td class="p-1"><input type="text" id="widal" class="res-input"></td></tr>
+                <tr class="border-b border-slate-100"><td class="p-1 border-r">H. Pylori Test</td><td class="p-1"><input type="text" id="hpylori" class="res-input"></td></tr>
               </table>
             </div>
 
-            <!-- URINE TEST -->
-            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-200 text-center text-[10.5px]">REPORT ON URINE TEST</div>
+            <div class="border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-300 text-center text-[10.5px]">REPORT ON URINE TEST</div>
               <div class="grid grid-cols-2 gap-1.5 p-1.5 text-[9.5px]">
-                <div class="flex items-center"><span class="w-16 font-semibold">Colour:</span><input type="text" class="res-input"></div>
-                <div class="flex items-center"><span class="w-16 font-semibold">Pus Cell:</span><input type="text" class="res-input"></div>
-                <div class="flex items-center"><span class="w-16 font-semibold">Sugar/Alb:</span><input type="text" class="res-input"></div>
-                <div class="flex items-center"><span class="w-16 font-semibold">RBC:</span><input type="text" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-24 font-semibold">Pregnancy Test:</span><input type="text" class="res-input"></div>
+                <div class="flex items-center"><span class="w-16 font-semibold">Colour:</span><input type="text" id="uColor" class="res-input"></div>
+                <div class="flex items-center"><span class="w-16 font-semibold">Pus Cell:</span><input type="text" id="uPus" class="res-input"></div>
+                <div class="flex items-center"><span class="w-16 font-semibold">Sugar/Alb:</span><input type="text" id="uSugarAlb" class="res-input"></div>
+                <div class="flex items-center"><span class="w-16 font-semibold">RBC:</span><input type="text" id="uRbc" class="res-input"></div>
+                <div class="flex items-center col-span-2"><span class="w-24 font-semibold">Pregnancy Test:</span><input type="text" id="uPreg" class="res-input"></div>
               </div>
             </div>
 
-            <!-- STOOL TEST -->
-            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-200 text-center text-[10.5px]">REPORT ON STOOL TEST</div>
+            <div class="border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-300 text-center text-[10.5px]">REPORT ON STOOL TEST</div>
               <div class="grid grid-cols-2 gap-1.5 p-1.5 text-[9.5px]">
-                <div class="flex items-center"><span class="w-16 font-semibold">Colour:</span><input type="text" class="res-input"></div>
-                <div class="flex items-center"><span class="w-16 font-semibold">Protozoa:</span><input type="text" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-20 font-semibold">Helminthes:</span><input type="text" class="res-input"></div>
+                <div class="flex items-center"><span class="w-16 font-semibold">Colour:</span><input type="text" id="sColor" class="res-input"></div>
+                <div class="flex items-center"><span class="w-16 font-semibold">Protozoa:</span><input type="text" id="sProtozoa" class="res-input"></div>
+                <div class="flex items-center col-span-2"><span class="w-20 font-semibold">Helminthes:</span><input type="text" id="sHelminthes" class="res-input"></div>
               </div>
             </div>
 
-            <!-- SEMEN ANALYSIS -->
-            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-200 text-center text-[10.5px]">SEMEN ANALYSIS</div>
+            <div class="border border-slate-300 rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-red-50 font-extrabold px-2 py-1 text-red-700 border-b border-slate-300 text-center text-[10.5px]">SEMEN ANALYSIS</div>
               <div class="grid grid-cols-2 gap-1.5 p-1.5 text-[9.5px]">
-                <div class="flex items-center"><span class="w-16 font-semibold">Motility:</span><input type="text" class="res-input"></div>
-                <div class="flex items-center"><span class="w-16 font-semibold">Count:</span><input type="text" class="res-input"></div>
+                <div class="flex items-center"><span class="w-16 font-semibold">Motility:</span><input type="text" id="semenMotility" class="res-input"></div>
+                <div class="flex items-center"><span class="w-16 font-semibold">Count:</span><input type="text" id="semenCount" class="res-input"></div>
               </div>
             </div>
 
@@ -280,11 +270,9 @@
 
         </div>
 
-        <!-- LAB TECHNICIAN SIGNATURE SECTION -->
-        <div class="mt-6 flex justify-end">
-          <div class="text-center w-52 border-t-2 border-slate-800 pt-1">
-            <input type="text" id="techNameInput" value="Manoj Bhusal" class="text-center font-extrabold text-xs w-full bg-transparent border-none focus:outline-none text-slate-900" placeholder="Lab Technician Name">
-            <p class="font-bold text-[10px] uppercase tracking-wider text-slate-600">Lab Technician</p>
+        <div class="mt-8 flex justify-end">
+          <div class="text-center w-48 border-t-2 border-slate-800 pt-1">
+            <p class="font-black text-xs uppercase tracking-wider text-slate-900">Lab Technician</p>
           </div>
         </div>
 
@@ -293,16 +281,46 @@
 
   </div>
 
-  <!-- JavaScript Logic -->
+  <!-- ================= SAVED RECORDS MODAL ================= -->
+  <div id="recordsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4 hidden no-print">
+    <div class="glass-card rounded-2xl shadow-2xl border border-white/20 p-6 w-full max-w-4xl max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-200">
+        <h3 class="text-lg font-black text-slate-900">Saved Laboratory Records (Database)</h3>
+        <button onclick="toggleRecordsModal()" class="text-slate-500 hover:text-red-600 font-bold text-xl">&times;</button>
+      </div>
+      
+      <div class="py-3">
+        <input type="text" id="searchRecord" onkeyup="filterRecords()" class="w-full px-4 py-2 border border-slate-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-red-500" placeholder="Search by Patient Name or Lab No...">
+      </div>
+
+      <div class="overflow-y-auto flex-grow">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+              <th class="p-2.5">Lab No</th>
+              <th class="p-2.5">Date</th>
+              <th class="p-2.5">Patient Name</th>
+              <th class="p-2.5">Age/Sex</th>
+              <th class="p-2.5 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody id="recordsTableBody">
+            <!-- Dynamic Records Load Here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('reportDate').value = today;
+    function setTodayDate() {
+      document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
+    }
+    setTodayDate();
 
     function authenticate(e) {
       e.preventDefault();
-      const u = document.getElementById('userInput').value;
-      const p = document.getElementById('passInput').value;
-      if (u === 'manoj' && p === 'bhusal') {
+      if (document.getElementById('userInput').value === 'admin' && document.getElementById('passInput').value === 'admin123') {
         document.getElementById('loginModal').classList.add('hidden');
         document.getElementById('appInterface').classList.remove('hidden');
       } else {
@@ -311,10 +329,109 @@
     }
 
     function exitApp() {
-      document.getElementById('appInterface').classList.remove('hidden');
+      document.getElementById('appInterface').classList.add('hidden');
       document.getElementById('loginModal').classList.remove('hidden');
       document.getElementById('userInput').value = '';
       document.getElementById('passInput').value = '';
+    }
+
+    // Database / Storage Logic
+    function saveRecord() {
+      const labNo = document.getElementById('pLabNo').value.trim();
+      const name = document.getElementById('pName').value.trim();
+      
+      if (!labNo || !name) {
+        alert('कृपया Patient Name र Lab No. अनिवार्य भर्नुहोस्!');
+        return;
+      }
+
+      const formElements = document.getElementById('reportForm').elements;
+      const recordData = {};
+
+      for (let el of formElements) {
+        if (el.id) {
+          recordData[el.id] = el.value;
+        }
+      }
+
+      let records = JSON.parse(localStorage.getItem('lab_records') || '[]');
+      const existingIndex = records.findIndex(r => r.pLabNo === labNo);
+
+      if (existingIndex > -1) {
+        records[existingIndex] = recordData;
+      } else {
+        records.push(recordData);
+      }
+
+      localStorage.setItem('lab_records', JSON.stringify(records));
+      alert(`Record saved successfully for ${name} (Lab No: ${labNo})`);
+    }
+
+    function toggleRecordsModal() {
+      const modal = document.getElementById('recordsModal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        renderRecords();
+      }
+    }
+
+    function renderRecords() {
+      const records = JSON.parse(localStorage.getItem('lab_records') || '[]');
+      const tbody = document.getElementById('recordsTableBody');
+      tbody.innerHTML = '';
+
+      if (records.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-400">कुनै पनि रेकर्ड सेभ गरिएको छैन।</td></tr>';
+        return;
+      }
+
+      records.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-slate-100 hover:bg-slate-50';
+        tr.innerHTML = `
+          <td class="p-2.5 font-bold text-red-600">${r.pLabNo || '-'}</td>
+          <td class="p-2.5">${r.reportDate || '-'}</td>
+          <td class="p-2.5 font-bold">${r.pName || '-'}</td>
+          <td class="p-2.5">${r.pAgeSex || '-'}</td>
+          <td class="p-2.5 text-center space-x-2">
+            <button onclick="loadRecord('${r.pLabNo}')" class="bg-blue-600 text-white px-2.5 py-1 rounded text-[10px] font-bold">Load</button>
+            <button onclick="deleteRecord('${r.pLabNo}')" class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-bold">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function loadRecord(labNo) {
+      const records = JSON.parse(localStorage.getItem('lab_records') || '[]');
+      const record = records.find(r => r.pLabNo === labNo);
+      
+      if (record) {
+        for (let key in record) {
+          if (document.getElementById(key)) {
+            document.getElementById(key).value = record[key];
+          }
+        }
+        toggleRecordsModal();
+      }
+    }
+
+    function deleteRecord(labNo) {
+      if (confirm(`के तपाईं Lab No: ${labNo} को रेकर्ड हटाउन चाहनुहुन्छ?`)) {
+        let records = JSON.parse(localStorage.getItem('lab_records') || '[]');
+        records = records.filter(r => r.pLabNo !== labNo);
+        localStorage.setItem('lab_records', JSON.stringify(records));
+        renderRecords();
+      }
+    }
+
+    function filterRecords() {
+      const query = document.getElementById('searchRecord').value.toLowerCase();
+      const rows = document.querySelectorAll('#recordsTableBody tr');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
     }
   </script>
 
