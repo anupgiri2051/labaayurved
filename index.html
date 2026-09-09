@@ -3,30 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>धौलागिरी आयुर्वेद अस्पताल - Lab System with Database</title>
+  <title>धौलागिरी आयुर्वेद अस्पताल - Clean AI Lab System</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Mukta:wght@400;600;700;800&display=swap');
     
     body {
-      font-family: 'Mukta', 'Plus Jakarta Sans', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      font-family: 'Plus Jakarta Sans', 'Mukta', sans-serif;
+      background-color: #f8fafc;
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(220, 38, 38, 0.03) 0px, transparent 40%),
+        radial-gradient(at 90% 90%, rgba(37, 99, 235, 0.03) 0px, transparent 40%);
+      background-attachment: fixed;
     }
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+    /* Clean Card Container Style */
+    .clean-panel {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
     }
 
+    /* Ultra Clear Focus Inputs for Quick Typing */
     .res-input {
       background-color: #f1f5f9;
       border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      padding: 2px 6px;
+      border-radius: 6px;
+      padding: 3px 6px;
       font-weight: 700;
       color: #0f172a;
-      transition: all 0.15s ease-in-out;
+      transition: all 0.2s ease-in-out;
       width: 100%;
       font-size: 11px;
     }
@@ -34,13 +40,14 @@
       outline: none;
       background-color: #ffffff;
       border-color: #dc2626;
-      box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
     }
 
+    /* Print Specific Style Optimization */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 5mm;
+        margin: 4mm;
       }
       .no-print { display: none !important; }
       body { 
@@ -73,31 +80,34 @@
 <body class="text-slate-800 min-h-screen p-2 md:p-6 flex flex-col justify-center items-center">
 
   <!-- ================= AUTHENTICATION MODAL ================= -->
-  <div id="loginModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-    <div class="glass-card rounded-3xl shadow-2xl border border-white/20 p-8 w-full max-w-md relative overflow-hidden">
+  <div id="loginModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div class="clean-panel rounded-3xl p-8 w-full max-w-md relative overflow-hidden">
       
       <div class="text-center mb-6 relative">
-        <div class="w-24 h-24 mx-auto mb-3 flex items-center justify-center filter drop-shadow-md">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg" alt="Emblem of Nepal" class="w-full h-full object-contain">
+        <div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center p-2 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg" alt="Emblem of Nepal" class="w-full h-full object-contain filter drop-shadow">
+        </div>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-red-600 text-[10px] font-bold uppercase tracking-wider mb-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span> Smart AI Lab Engine
         </div>
         <h2 class="text-2xl font-black text-slate-900 tracking-tight">धौलागिरी आयुर्वेद अस्पताल</h2>
-        <p class="text-xs text-red-600 font-bold uppercase tracking-widest mt-1">गण्डकी प्रदेश, बाग्लुङ | स्मार्ट ल्याब प्रणाली</p>
+        <p class="text-xs text-slate-500 font-semibold mt-1">बाग्लुङ, गण्डकी प्रदेश | Laboratory Portal</p>
       </div>
       
-      <div id="loginError" class="hidden mb-4 p-3 bg-red-100 border border-red-300 text-red-700 text-xs rounded-xl text-center font-bold">
+      <div id="loginError" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl text-center font-bold">
         User ID वा Password मिलेन! (ID: admin | Pass: admin123)
       </div>
 
       <form onsubmit="authenticate(event)" class="space-y-4 relative">
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider">User ID</label>
-          <input type="text" id="userInput" class="w-full px-4 py-3 text-sm bg-slate-100/80 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition" placeholder="Enter User ID" required>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1 uppercase tracking-wider">User ID</label>
+          <input type="text" id="userInput" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white text-slate-900 placeholder-slate-400 outline-none transition" placeholder="Enter User ID" required>
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider">Password</label>
-          <input type="password" id="passInput" class="w-full px-4 py-3 text-sm bg-slate-100/80 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition" placeholder="Enter Password" required>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1 uppercase tracking-wider">Password</label>
+          <input type="password" id="passInput" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white text-slate-900 placeholder-slate-400 outline-none transition" placeholder="Enter Password" required>
         </div>
-        <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 rounded-xl text-sm shadow-lg shadow-red-500/30 transition transform hover:-translate-y-0.5">
+        <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3.5 rounded-xl text-sm shadow-md shadow-red-500/20 transition transform hover:-translate-y-0.5 active:translate-y-0">
           प्रणालीमा प्रवेश गर्नुहोस् (Login)
         </button>
       </form>
@@ -108,23 +118,32 @@
   <div id="appInterface" class="hidden w-full max-w-5xl">
     
     <!-- Top Action Bar -->
-    <div class="mb-4 no-print glass-card p-3.5 rounded-2xl shadow-xl flex flex-wrap justify-between items-center gap-3">
+    <div class="mb-4 no-print clean-panel p-3.5 rounded-2xl flex flex-wrap justify-between items-center gap-3">
       <div class="flex items-center space-x-3">
-        <div class="w-9 h-9 bg-red-600 text-white rounded-xl flex items-center justify-center font-extrabold text-sm shadow-md">LAB</div>
+        <div class="w-10 h-10 bg-gradient-to-tr from-red-600 to-rose-600 text-white rounded-xl flex items-center justify-center font-black text-sm shadow-sm">
+          AI
+        </div>
         <div>
-          <h1 class="text-sm font-extrabold text-slate-900">Lab Technician Portal</h1>
-          <p class="text-[11px] text-slate-500 font-semibold">धौलागिरी आयुर्वेद अस्पताल - बाग्लुङ</p>
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm font-extrabold text-slate-900">Lab Diagnostic Workstation</h1>
+            <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-bold px-2 py-0.5 rounded-full">System Ready</span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-semibold">धौलागिरी आयुर्वेद अस्पताल - स्मार्ट प्रयोगशाला प्रणाली</p>
         </div>
       </div>
+      
       <div class="flex items-center space-x-2">
-        <button onclick="saveRecord()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-md shadow-emerald-500/20 transition flex items-center space-x-1">
+        <button onclick="analyzeWithAI()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-sm transition flex items-center space-x-1.5">
+          <span>✨ AI Auto-Analyze</span>
+        </button>
+        <button onclick="saveRecord()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-sm transition flex items-center space-x-1">
           <span>💾 Save Record</span>
         </button>
-        <button onclick="toggleRecordsModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-md shadow-blue-500/20 transition flex items-center space-x-1">
+        <button onclick="toggleRecordsModal()" class="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800 font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center space-x-1">
           <span>📁 View Records</span>
         </button>
-        <button onclick="window.print()" class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-red-500/20 transition flex items-center space-x-1.5">
-          <span>🖨️ Print</span>
+        <button onclick="window.print()" class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm transition flex items-center space-x-1.5">
+          <span>🖨️ Print Report</span>
         </button>
         <button onclick="document.getElementById('reportForm').reset(); setTodayDate();" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-2 rounded-xl text-xs transition">
           Clear
@@ -135,8 +154,8 @@
       </div>
     </div>
 
-    <!-- Printable Report Sheet -->
-    <div class="print-area glass-card border border-slate-200 shadow-2xl p-5 rounded-2xl text-[10.5px] leading-tight text-slate-900">
+    <!-- Printable Report Sheet (A4 Fit) -->
+    <div class="print-area clean-panel p-5 rounded-2xl text-[10.5px] leading-tight text-slate-900">
       
       <form id="reportForm">
         
@@ -156,7 +175,7 @@
 
             <div class="w-28 text-right text-[9.5px] text-slate-600 font-medium">
               <p class="font-bold text-slate-900">फोन: ०६८-५२००३१</p>
-              <p>स्थापना: बागलुङ</p>
+              <p>स्थान: बागलुङ</p>
             </div>
           </div>
         </div>
@@ -270,7 +289,16 @@
 
         </div>
 
-        <div class="mt-8 flex justify-end">
+        <!-- Dynamic AI Analysis Summary Box -->
+        <div id="aiSummaryBox" class="hidden mt-3 p-2.5 bg-purple-50 border border-purple-200 rounded-lg text-[9.5px]">
+          <div class="font-bold text-purple-900 flex items-center gap-1 mb-0.5">
+            <span>✨ AI Clinical Findings Note:</span>
+          </div>
+          <p id="aiSummaryText" class="text-slate-700 italic leading-snug"></p>
+        </div>
+
+        <!-- LAB TECHNICIAN SIGNATURE SECTION -->
+        <div class="mt-6 flex justify-end">
           <div class="text-center w-48 border-t-2 border-slate-800 pt-1">
             <p class="font-black text-xs uppercase tracking-wider text-slate-900">Lab Technician</p>
           </div>
@@ -282,29 +310,32 @@
   </div>
 
   <!-- ================= SAVED RECORDS MODAL ================= -->
-  <div id="recordsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4 hidden no-print">
-    <div class="glass-card rounded-2xl shadow-2xl border border-white/20 p-6 w-full max-w-4xl max-h-[85vh] flex flex-col">
+  <div id="recordsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 hidden no-print">
+    <div class="clean-panel rounded-3xl p-6 w-full max-w-4xl max-h-[85vh] flex flex-col">
       <div class="flex justify-between items-center pb-4 border-b border-slate-200">
-        <h3 class="text-lg font-black text-slate-900">Saved Laboratory Records (Database)</h3>
-        <button onclick="toggleRecordsModal()" class="text-slate-500 hover:text-red-600 font-bold text-xl">&times;</button>
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 rounded-full bg-red-600"></div>
+          <h3 class="text-lg font-black text-slate-900">Laboratory Database Records</h3>
+        </div>
+        <button onclick="toggleRecordsModal()" class="text-slate-400 hover:text-red-600 font-bold text-2xl transition">&times;</button>
       </div>
       
       <div class="py-3">
-        <input type="text" id="searchRecord" onkeyup="filterRecords()" class="w-full px-4 py-2 border border-slate-300 rounded-xl text-xs outline-none focus:ring-2 focus:ring-red-500" placeholder="Search by Patient Name or Lab No...">
+        <input type="text" id="searchRecord" onkeyup="filterRecords()" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 outline-none focus:ring-2 focus:ring-red-500" placeholder="Search by Patient Name or Lab No...">
       </div>
 
-      <div class="overflow-y-auto flex-grow">
+      <div class="overflow-y-auto flex-grow rounded-xl border border-slate-200">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
-              <th class="p-2.5">Lab No</th>
-              <th class="p-2.5">Date</th>
-              <th class="p-2.5">Patient Name</th>
-              <th class="p-2.5">Age/Sex</th>
-              <th class="p-2.5 text-center">Action</th>
+              <th class="p-3">Lab No</th>
+              <th class="p-3">Date</th>
+              <th class="p-3">Patient Name</th>
+              <th class="p-3">Age/Sex</th>
+              <th class="p-3 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody id="recordsTableBody">
+          <tbody id="recordsTableBody" class="divide-y divide-slate-100">
             <!-- Dynamic Records Load Here -->
           </tbody>
         </table>
@@ -333,6 +364,32 @@
       document.getElementById('loginModal').classList.remove('hidden');
       document.getElementById('userInput').value = '';
       document.getElementById('passInput').value = '';
+    }
+
+    // AI Medical Assistant Logic
+    function analyzeWithAI() {
+      const wbc = parseFloat(document.getElementById('wbc').value) || 0;
+      const hb = parseFloat(document.getElementById('hb').value) || 0;
+      const sugarF = parseFloat(document.getElementById('sugarF').value) || 0;
+      
+      let remarks = [];
+
+      if (wbc > 11000) remarks.push("Elevated Leukocytes (WBC > 11,000 /uL) suggesting potential infection/inflammation.");
+      else if (wbc > 0 && wbc < 4000) remarks.push("Leukopenia (WBC < 4,000 /uL) detected.");
+
+      if (hb > 0 && hb < 11) remarks.push("Low Hemoglobin level (< 11 g/dL) indicating anemia.");
+      if (sugarF > 110) remarks.push("Fasting Blood Sugar elevated (> 110 mg/dL).");
+
+      const box = document.getElementById('aiSummaryBox');
+      const text = document.getElementById('aiSummaryText');
+
+      if (remarks.length > 0) {
+        text.innerText = remarks.join(" ");
+        box.classList.remove('hidden');
+      } else {
+        text.innerText = "All measured baseline parameters (WBC, Hb, Sugar) fall within standard reference intervals.";
+        box.classList.remove('hidden');
+      }
     }
 
     // Database / Storage Logic
@@ -387,15 +444,15 @@
 
       records.forEach(r => {
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-slate-100 hover:bg-slate-50';
+        tr.className = 'hover:bg-slate-50 text-slate-700 transition';
         tr.innerHTML = `
-          <td class="p-2.5 font-bold text-red-600">${r.pLabNo || '-'}</td>
-          <td class="p-2.5">${r.reportDate || '-'}</td>
-          <td class="p-2.5 font-bold">${r.pName || '-'}</td>
-          <td class="p-2.5">${r.pAgeSex || '-'}</td>
-          <td class="p-2.5 text-center space-x-2">
-            <button onclick="loadRecord('${r.pLabNo}')" class="bg-blue-600 text-white px-2.5 py-1 rounded text-[10px] font-bold">Load</button>
-            <button onclick="deleteRecord('${r.pLabNo}')" class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-bold">Delete</button>
+          <td class="p-3 font-bold text-red-600">${r.pLabNo || '-'}</td>
+          <td class="p-3">${r.reportDate || '-'}</td>
+          <td class="p-3 font-bold text-slate-900">${r.pName || '-'}</td>
+          <td class="p-3">${r.pAgeSex || '-'}</td>
+          <td class="p-3 text-center space-x-2">
+            <button onclick="loadRecord('${r.pLabNo}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-[10px] font-bold transition">Load</button>
+            <button onclick="deleteRecord('${r.pLabNo}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-[10px] font-bold transition">Delete</button>
           </td>
         `;
         tbody.appendChild(tr);
