@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>धौलागिरी आयुर्वेद अस्पताल - Smart Dynamic Lab System</title>
+  <title>Ayurveda Hospital, Baglung - Lab System</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Mukta:wght@400;600;700;800&display=swap');
@@ -38,6 +38,7 @@
       box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15);
     }
 
+    /* Print Specific Style Optimization - Snaps to Top of A4 Paper */
     @media print {
       @page {
         size: A4 portrait;
@@ -48,6 +49,8 @@
         background: white !important; 
         padding: 0 !important; 
         margin: 0 !important; 
+        justify-content: flex-start !important; /* Forces content to start from top */
+        align-items: stretch !important;
       }
       .print-area { 
         border: none !important; 
@@ -80,9 +83,9 @@
   <div id="loginModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="clean-panel rounded-2xl p-6 w-full max-w-md bg-white">
       <div class="text-center mb-4">
-        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-widest">गण्डकी प्रदेश सरकार</h3>
-        <h2 class="text-xl font-black text-slate-900">धौलागिरी आयुर्वेद अस्पताल, बाग्लुङ</h2>
-        <p class="text-xs text-slate-500 font-semibold mt-1">प्रयोगशाला प्रतिवेदन प्रणाली | Phone: 068-520031</p>
+        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-widest">Government of Gandaki Province</h3>
+        <h2 class="text-xl font-black text-slate-900">Ayurveda Hospital, Baglung</h2>
+        <p class="text-xs text-slate-500 font-semibold mt-1">Laboratory Report System | Phone: 068-520031</p>
       </div>
       <div id="loginError" class="hidden mb-3 p-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded text-center font-bold">
         User ID वा Password मिलेन! (ID: admin | Pass: admin123)
@@ -133,8 +136,8 @@
               <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg" alt="Emblem of Nepal" class="w-full h-full object-contain">
             </div>
             <div class="text-center flex-grow px-2">
-              <h3 class="text-xs font-bold text-slate-700 uppercase tracking-widest">गण्डकी प्रदेश सरकार</h3>
-              <h1 class="text-base font-black text-red-700 tracking-wide uppercase">धौलागिरी आयुर्वेद अस्पताल, बाग्लुङ</h1>
+              <h3 class="text-xs font-bold text-slate-700 uppercase tracking-widest">Government of Gandaki Province</h3>
+              <h1 class="text-base font-black text-red-700 tracking-wide uppercase">Ayurveda Hospital, Baglung</h1>
               <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider mt-0.5">Laboratory Report Sheet</h2>
             </div>
             <div class="text-right text-[9.5px] font-bold text-slate-800">
