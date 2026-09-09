@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>धौलागिरी आयुर्वेद अस्पताल - Lab System</title>
+  <title>धौलागिरी आयुर्वेद अस्पताल - Smart Dynamic Lab System</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Mukta:wght@400;600;700;800&display=swap');
@@ -41,7 +41,7 @@
     @media print {
       @page {
         size: A4 portrait;
-        margin: 4mm;
+        margin: 5mm;
       }
       .no-print { display: none !important; }
       body { 
@@ -67,6 +67,9 @@
       input { 
         border: none !important; 
         background: transparent !important; 
+      }
+      .hide-in-print {
+        display: none !important;
       }
     }
   </style>
@@ -112,7 +115,7 @@
         <button onclick="analyzeWithAI()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3 py-1.5 rounded text-xs transition">✨ AI Analyze</button>
         <button onclick="saveRecord()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded text-xs transition">💾 Save Record</button>
         <button onclick="toggleRecordsModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-3 py-1.5 rounded text-xs transition">📁 View Records</button>
-        <button onclick="window.print()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1.5 rounded text-xs transition">🖨️ Print Report</button>
+        <button onclick="printReport()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1.5 rounded text-xs transition">🖨️ Print Report Only</button>
         <button onclick="document.getElementById('reportForm').reset(); setTodayDate();" class="bg-slate-100 border border-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded text-xs transition">Clear</button>
         <button onclick="exitApp()" class="bg-slate-900 text-white font-bold px-3 py-1.5 rounded text-xs transition">Logout</button>
       </div>
@@ -157,74 +160,74 @@
           <div class="space-y-2">
             
             <!-- HAEMATOLOGICAL TEST -->
-            <div class="border border-slate-400 rounded overflow-hidden">
+            <div class="test-block border border-slate-400 rounded overflow-hidden">
               <div class="bg-slate-100 font-extrabold px-2 py-0.5 border-b border-slate-400 text-center text-[10px]">HAEMATOLOGICAL TEST</div>
               <table class="w-full text-left border-collapse">
-                <tr class="bg-slate-50 text-[9px] border-b border-slate-300 font-bold">
+                <tr class="header-row bg-slate-50 text-[9px] border-b border-slate-300 font-bold">
                   <th class="p-1 border-r border-slate-300">Parameters</th>
                   <th class="p-1 border-r border-slate-300 w-20">Result</th>
                   <th class="p-1">Normal Value</th>
                 </tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">WBC</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="wbc" class="res-input"></td><td class="p-0.5 text-slate-600">4000-11000/uL</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">RBC</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="rbc" class="res-input"></td><td class="p-0.5 text-slate-600">4.0x10⁶-5.5x10⁶/uL</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Platelets</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="platelets" class="res-input"></td><td class="p-0.5 text-slate-600">150000-400000/uL</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">WBC</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="wbc" class="res-input"></td><td class="p-0.5 text-slate-600">4000-11000/uL</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">RBC</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="rbc" class="res-input"></td><td class="p-0.5 text-slate-600">4.0x10⁶-5.5x10⁶/uL</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Platelets</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="platelets" class="res-input"></td><td class="p-0.5 text-slate-600">150000-400000/uL</td></tr>
                 
-                <tr class="bg-slate-100 font-bold"><td colspan="3" class="p-0.5 border-y border-slate-300 text-slate-800 text-[9px]">DIFFERENTIAL COUNT</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Neutrophil</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="neutrophil" class="res-input"></td><td class="p-0.5 text-slate-600">45-75%</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Lymphocyte</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="lymphocyte" class="res-input"></td><td class="p-0.5 text-slate-600">20-45%</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Eosinophil</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="eosinophil" class="res-input"></td><td class="p-0.5 text-slate-600">1-6%</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Monocyte</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="monocyte" class="res-input"></td><td class="p-0.5 text-slate-600">2-10%</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Basophil</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="basophil" class="res-input"></td><td class="p-0.5 text-slate-600">0-1%</td></tr>
+                <tr class="sub-header-row bg-slate-100 font-bold"><td colspan="3" class="p-0.5 border-y border-slate-300 text-slate-800 text-[9px]">DIFFERENTIAL COUNT</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Neutrophil</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="neutrophil" class="res-input"></td><td class="p-0.5 text-slate-600">45-75%</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Lymphocyte</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="lymphocyte" class="res-input"></td><td class="p-0.5 text-slate-600">20-45%</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Eosinophil</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="eosinophil" class="res-input"></td><td class="p-0.5 text-slate-600">1-6%</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Monocyte</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="monocyte" class="res-input"></td><td class="p-0.5 text-slate-600">2-10%</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">Basophil</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="basophil" class="res-input"></td><td class="p-0.5 text-slate-600">0-1%</td></tr>
                 
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 font-semibold">Hemoglobin</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="hb" class="res-input"></td><td class="p-0.5 text-slate-600">M=12-17, F=11-16g/dL</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">PCV</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="pcv" class="res-input"></td><td class="p-0.5 text-slate-600">35-55%</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">MCV</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="mcv" class="res-input"></td><td class="p-0.5 text-slate-600">82-92%</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">MCH</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="mch" class="res-input"></td><td class="p-0.5 text-slate-600">27-32 pg</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">MCHC</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="mchc" class="res-input"></td><td class="p-0.5 text-slate-600">32-36%</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">ESR (wintrobe's)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="esr" class="res-input"></td><td class="p-0.5 text-slate-600">M=0-10, F=0-20 mm/1"hrs</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Bleeding Time (B.T)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="bt" class="res-input"></td><td class="p-0.5 text-slate-600">2-6 min.</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Clotting Time (C.T.)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="ct" class="res-input"></td><td class="p-0.5 text-slate-600">4-9 min.</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Prothrombin Time (P.T.)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="pt" class="res-input"></td><td class="p-0.5 text-slate-600">14±2 sec.</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">INR</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="inr" class="res-input"></td><td class="p-0.5 text-slate-600">-</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Malaria Parasite (M.P)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="mp" class="res-input"></td><td class="p-0.5 text-slate-600">-</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 font-semibold">Blood Group/Rh</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="bloodGroup" class="res-input font-bold text-red-600"></td><td class="p-0.5 text-slate-600">-</td></tr>
-                <tr><td class="p-0.5 border-r border-slate-200">Others:</td><td colspan="2" class="p-0.5"><input type="text" id="haemaOthers" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 font-semibold">Hemoglobin</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="hb" class="res-input"></td><td class="p-0.5 text-slate-600">M=12-17, F=11-16g/dL</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">PCV</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="pcv" class="res-input"></td><td class="p-0.5 text-slate-600">35-55%</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">MCV</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="mcv" class="res-input"></td><td class="p-0.5 text-slate-600">82-92%</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">MCH</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="mch" class="res-input"></td><td class="p-0.5 text-slate-600">27-32 pg</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">MCHC</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="mchc" class="res-input"></td><td class="p-0.5 text-slate-600">32-36%</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">ESR (wintrobe's)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="esr" class="res-input"></td><td class="p-0.5 text-slate-600">M=0-10, F=0-20 mm/1"hrs</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Bleeding Time (B.T)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="bt" class="res-input"></td><td class="p-0.5 text-slate-600">2-6 min.</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Clotting Time (C.T.)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="ct" class="res-input"></td><td class="p-0.5 text-slate-600">4-9 min.</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Prothrombin Time (P.T.)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="pt" class="res-input"></td><td class="p-0.5 text-slate-600">14±2 sec.</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">INR</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="inr" class="res-input"></td><td class="p-0.5 text-slate-600">-</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Malaria Parasite (M.P)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="mp" class="res-input"></td><td class="p-0.5 text-slate-600">-</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 font-semibold">Blood Group/Rh</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="bloodGroup" class="res-input font-bold text-red-600"></td><td class="p-0.5 text-slate-600">-</td></tr>
+                <tr class="test-row"><td class="p-0.5 border-r border-slate-200">Others:</td><td colspan="2" class="p-0.5"><input type="text" id="haemaOthers" class="res-input"></td></tr>
               </table>
             </div>
 
             <!-- BIOCHEMICAL TEST -->
-            <div class="border border-slate-400 rounded overflow-hidden">
+            <div class="test-block border border-slate-400 rounded overflow-hidden">
               <div class="bg-slate-100 font-extrabold px-2 py-0.5 border-b border-slate-400 text-center text-[10px]">BIOCHEMICAL TEST</div>
               <table class="w-full text-left border-collapse">
-                <tr class="bg-slate-50 text-[9px] border-b border-slate-300 font-bold">
+                <tr class="header-row bg-slate-50 text-[9px] border-b border-slate-300 font-bold">
                   <th class="p-1 border-r border-slate-300">Parameters</th>
                   <th class="p-1 border-r border-slate-300 w-20">Result</th>
                   <th class="p-1">Normal Value</th>
                 </tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">B.Sugar (F)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sugarF" class="res-input"></td><td class="p-0.5 text-slate-600">60-110mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">B.Sugar (PP)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sugarPP" class="res-input"></td><td class="p-0.5 text-slate-600">70-140mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">B. Sugar (R)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sugarR" class="res-input"></td><td class="p-0.5 text-slate-600">&lt;140mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Urea</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="urea" class="res-input"></td><td class="p-0.5 text-slate-600">15-45mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">S. Creatinine</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="creatinine" class="res-input"></td><td class="p-0.5 text-slate-600">0.4-1.4mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">S.Sodium (Na⁺)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sodium" class="res-input"></td><td class="p-0.5 text-slate-600">135-145mEq/L</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">S.Potassium (K⁺)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="potassium" class="res-input"></td><td class="p-0.5 text-slate-600">3.5-5.5mEq/L</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Bilirubin (T)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="biliT" class="res-input"></td><td class="p-0.5 text-slate-600">0.4-1.2mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Bilirubin (D)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="biliD" class="res-input"></td><td class="p-0.5 text-slate-600">&lt;0.3mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Bilirubin (I)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="biliI" class="res-input"></td><td class="p-0.5 text-slate-600">0.1-0.8mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">SGOT</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sgot" class="res-input"></td><td class="p-0.5 text-slate-600">M=10-40 U/L, F=7-30U/L</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">SGPT</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sgpt" class="res-input"></td><td class="p-0.5 text-slate-600">M=10-55U/L, F=7-30U/L</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">ALP</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="alp" class="res-input"></td><td class="p-0.5 text-slate-600">65-306U/L</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Total Protein</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="totalProtein" class="res-input"></td><td class="p-0.5 text-slate-600">6-8g/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Albumin</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="bioAlbumin" class="res-input"></td><td class="p-0.5 text-slate-600">3.5-5.5mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Globulin</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="globulin" class="res-input"></td><td class="p-0.5 text-slate-600">2.5-3.0mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">A/G ration</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="agRatio" class="res-input"></td><td class="p-0.5 text-slate-600">1.0-1.8</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Total Cholesterol</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="cholesterol" class="res-input"></td><td class="p-0.5 text-slate-600">150-250mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Triglyceride</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="triglyceride" class="res-input"></td><td class="p-0.5 text-slate-600">35-170mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">HDL</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="hdl" class="res-input"></td><td class="p-0.5 text-slate-600">30-65mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">LDL</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="ldl" class="res-input"></td><td class="p-0.5 text-slate-600">70-160mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">VLDL</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="vldl" class="res-input"></td><td class="p-0.5 text-slate-600">10-55mg/dl</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Uric Acid</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="uricAcid" class="res-input"></td><td class="p-0.5 text-slate-600">M=3.5-7.2, F=2.7-7.0mg/dl</td></tr>
-                <tr><td class="p-0.5 border-r border-slate-200">Others</td><td colspan="2" class="p-0.5"><input type="text" id="bioOthers" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">B.Sugar (F)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sugarF" class="res-input"></td><td class="p-0.5 text-slate-600">60-110mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">B.Sugar (PP)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sugarPP" class="res-input"></td><td class="p-0.5 text-slate-600">70-140mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">B. Sugar (R)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sugarR" class="res-input"></td><td class="p-0.5 text-slate-600">&lt;140mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Urea</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="urea" class="res-input"></td><td class="p-0.5 text-slate-600">15-45mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">S. Creatinine</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="creatinine" class="res-input"></td><td class="p-0.5 text-slate-600">0.4-1.4mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">S.Sodium (Na⁺)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sodium" class="res-input"></td><td class="p-0.5 text-slate-600">135-145mEq/L</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">S.Potassium (K⁺)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="potassium" class="res-input"></td><td class="p-0.5 text-slate-600">3.5-5.5mEq/L</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Bilirubin (T)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="biliT" class="res-input"></td><td class="p-0.5 text-slate-600">0.4-1.2mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Bilirubin (D)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="biliD" class="res-input"></td><td class="p-0.5 text-slate-600">&lt;0.3mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Bilirubin (I)</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="biliI" class="res-input"></td><td class="p-0.5 text-slate-600">0.1-0.8mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">SGOT</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sgot" class="res-input"></td><td class="p-0.5 text-slate-600">M=10-40 U/L, F=7-30U/L</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">SGPT</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="sgpt" class="res-input"></td><td class="p-0.5 text-slate-600">M=10-55U/L, F=7-30U/L</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">ALP</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="alp" class="res-input"></td><td class="p-0.5 text-slate-600">65-306U/L</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Total Protein</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="totalProtein" class="res-input"></td><td class="p-0.5 text-slate-600">6-8g/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Albumin</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="bioAlbumin" class="res-input"></td><td class="p-0.5 text-slate-600">3.5-5.5mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Globulin</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="globulin" class="res-input"></td><td class="p-0.5 text-slate-600">2.5-3.0mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">A/G ration</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="agRatio" class="res-input"></td><td class="p-0.5 text-slate-600">1.0-1.8</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Total Cholesterol</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="cholesterol" class="res-input"></td><td class="p-0.5 text-slate-600">150-250mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Triglyceride</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="triglyceride" class="res-input"></td><td class="p-0.5 text-slate-600">35-170mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">HDL</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="hdl" class="res-input"></td><td class="p-0.5 text-slate-600">30-65mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">LDL</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="ldl" class="res-input"></td><td class="p-0.5 text-slate-600">70-160mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">VLDL</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="vldl" class="res-input"></td><td class="p-0.5 text-slate-600">10-55mg/dl</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Uric Acid</td><td class="p-0.5 border-r border-slate-200"><input type="text" id="uricAcid" class="res-input"></td><td class="p-0.5 text-slate-600">M=3.5-7.2, F=2.7-7.0mg/dl</td></tr>
+                <tr class="test-row"><td class="p-0.5 border-r border-slate-200">Others</td><td colspan="2" class="p-0.5"><input type="text" id="bioOthers" class="res-input"></td></tr>
               </table>
             </div>
 
@@ -234,106 +237,107 @@
           <div class="space-y-2">
             
             <!-- SEROLOGY / IMMUNOLOGY -->
-            <div class="border border-slate-400 rounded overflow-hidden">
+            <div class="test-block border border-slate-400 rounded overflow-hidden">
+              <div class="bg-slate-100 font-extrabold px-2 py-0.5 border-b border-slate-400 text-center text-[10px]">SEROLOGY / IMMUNOLOGY</div>
               <table class="w-full text-left border-collapse">
-                <tr class="bg-slate-50 text-[9px] border-b border-slate-300 font-bold">
+                <tr class="header-row bg-slate-50 text-[9px] border-b border-slate-300 font-bold">
                   <th class="p-1 border-r border-slate-300">Parameters</th>
                   <th class="p-1">Result</th>
                 </tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">HIV Ⅰ:</td><td class="p-0.5"><input type="text" id="hiv" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">HBsAg:</td><td class="p-0.5"><input type="text" id="hbsag" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">HCV:</td><td class="p-0.5"><input type="text" id="hcv" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">VDRL/RPR:</td><td class="p-0.5"><input type="text" id="vdrl" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">TPHA:</td><td class="p-0.5"><input type="text" id="tpha" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">RA factor:</td><td class="p-0.5"><input type="text" id="raFactor" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">CRP:</td><td class="p-0.5"><input type="text" id="crp" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Asotitre:</td><td class="p-0.5"><input type="text" id="asotitre" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">HIV Ⅰ:</td><td class="p-0.5"><input type="text" id="hiv" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">HBsAg:</td><td class="p-0.5"><input type="text" id="hbsag" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">HCV:</td><td class="p-0.5"><input type="text" id="hcv" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">VDRL/RPR:</td><td class="p-0.5"><input type="text" id="vdrl" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">TPHA:</td><td class="p-0.5"><input type="text" id="tpha" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">RA factor:</td><td class="p-0.5"><input type="text" id="raFactor" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">CRP:</td><td class="p-0.5"><input type="text" id="crp" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">Asotitre:</td><td class="p-0.5"><input type="text" id="asotitre" class="res-input"></td></tr>
                 
-                <tr class="bg-slate-100 font-bold"><td colspan="2" class="p-0.5 border-y border-slate-300 text-slate-800 text-[9px]">Widal Test:</td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">S.Typhi'O':</td><td class="p-0.5"><input type="text" id="widalO" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">S.Typhi'H':</td><td class="p-0.5"><input type="text" id="widalH" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">S.Paratyphi'AH':</td><td class="p-0.5"><input type="text" id="widalAH" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">S. ParaTyphi 'BH':</td><td class="p-0.5"><input type="text" id="widalBH" class="res-input"></td></tr>
+                <tr class="sub-header-row bg-slate-100 font-bold"><td colspan="2" class="p-0.5 border-y border-slate-300 text-slate-800 text-[9px]">Widal Test:</td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">S.Typhi'O':</td><td class="p-0.5"><input type="text" id="widalO" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">S.Typhi'H':</td><td class="p-0.5"><input type="text" id="widalH" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">S.Paratyphi'AH':</td><td class="p-0.5"><input type="text" id="widalAH" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200 pl-2">S. ParaTyphi 'BH':</td><td class="p-0.5"><input type="text" id="widalBH" class="res-input"></td></tr>
                 
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">H. Pylori (Antibodies):</td><td class="p-0.5"><input type="text" id="hpyloriAb" class="res-input"></td></tr>
-                <tr class="border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">H.Pylori (Antigen):</td><td class="p-0.5"><input type="text" id="hpyloriAg" class="res-input"></td></tr>
-                <tr><td class="p-0.5 border-r border-slate-200">Others:</td><td class="p-0.5"><input type="text" id="seroOthers" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">H. Pylori (Antibodies):</td><td class="p-0.5"><input type="text" id="hpyloriAb" class="res-input"></td></tr>
+                <tr class="test-row border-b border-slate-200"><td class="p-0.5 border-r border-slate-200">H.Pylori (Antigen):</td><td class="p-0.5"><input type="text" id="hpyloriAg" class="res-input"></td></tr>
+                <tr class="test-row"><td class="p-0.5 border-r border-slate-200">Others:</td><td class="p-0.5"><input type="text" id="seroOthers" class="res-input"></td></tr>
               </table>
             </div>
 
             <!-- REPORT ON URINE TEST -->
-            <div class="border border-slate-400 rounded overflow-hidden">
+            <div class="test-block border border-slate-400 rounded overflow-hidden">
               <div class="bg-slate-100 font-extrabold px-2 py-0.5 border-b border-slate-400 text-center text-[10px]">REPORT ON URINE TEST</div>
               <div class="grid grid-cols-2 gap-x-2 gap-y-1 p-1.5 text-[9.5px]">
-                <div class="flex items-center"><span class="w-20 font-semibold">Colour:</span><input type="text" id="uColor" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">RBC:</span><input type="text" id="uRbc" class="res-input" placeholder="/HPF"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Transparency:</span><input type="text" id="uTrans" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Pus Cell:</span><input type="text" id="uPus" class="res-input" placeholder="/HPF"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">pH:</span><input type="text" id="uPh" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Epi Cell:</span><input type="text" id="uEpi" class="res-input" placeholder="/HPF"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Sugar:</span><input type="text" id="uSugar" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Cast Cell:</span><input type="text" id="uCast" class="res-input" placeholder="/HPF"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Albumin:</span><input type="text" id="uAlbumin" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Crystal:</span><input type="text" id="uCrystal" class="res-input" placeholder="/HPF"></div>
-                <div class="flex items-center col-span-2"><span class="w-28 font-semibold">Bile Salt/Bile Pigment:</span><input type="text" id="uBile" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Urobilinogen:</span><input type="text" id="uUrobilinogen" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Ca-oxalates:</span><input type="text" id="uCaOxalates" class="res-input" placeholder="/HPF"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Acetone:</span><input type="text" id="uAcetone" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Bacteria:</span><input type="text" id="uBacteria" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-24 font-semibold">Pregnancy Test:</span><input type="text" id="uPregnancy" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-20 font-semibold">Other:</span><input type="text" id="uOther" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Colour:</span><input type="text" id="uColor" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">RBC:</span><input type="text" id="uRbc" class="res-input" placeholder="/HPF"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Transparency:</span><input type="text" id="uTrans" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Pus Cell:</span><input type="text" id="uPus" class="res-input" placeholder="/HPF"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">pH:</span><input type="text" id="uPh" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Epi Cell:</span><input type="text" id="uEpi" class="res-input" placeholder="/HPF"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Sugar:</span><input type="text" id="uSugar" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Cast Cell:</span><input type="text" id="uCast" class="res-input" placeholder="/HPF"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Albumin:</span><input type="text" id="uAlbumin" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Crystal:</span><input type="text" id="uCrystal" class="res-input" placeholder="/HPF"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-28 font-semibold">Bile Salt/Pigment:</span><input type="text" id="uBile" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Urobilinogen:</span><input type="text" id="uUrobilinogen" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Ca-oxalates:</span><input type="text" id="uCaOxalates" class="res-input" placeholder="/HPF"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Acetone:</span><input type="text" id="uAcetone" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Bacteria:</span><input type="text" id="uBacteria" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-24 font-semibold">Pregnancy Test:</span><input type="text" id="uPregnancy" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-20 font-semibold">Other:</span><input type="text" id="uOther" class="res-input"></div>
               </div>
             </div>
 
             <!-- REPORT ON STOOL TEST -->
-            <div class="border border-slate-400 rounded overflow-hidden">
+            <div class="test-block border border-slate-400 rounded overflow-hidden">
               <div class="bg-slate-100 font-extrabold px-2 py-0.5 border-b border-slate-400 text-center text-[10px]">REPORT ON STOOL TEST</div>
               <div class="grid grid-cols-2 gap-x-2 gap-y-1 p-1.5 text-[9.5px]">
-                <div class="flex items-center"><span class="w-20 font-semibold">Colour:</span><input type="text" id="sColor" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Pus Cell:</span><input type="text" id="sPus" class="res-input" placeholder="/HPF"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Consistency:</span><input type="text" id="sConsistency" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">RBC:</span><input type="text" id="sRbc" class="res-input" placeholder="/HPF"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Mucous:</span><input type="text" id="sMucous" class="res-input"></div>
-                <div class="flex items-center"><span class="w-20 font-semibold">Blood:</span><input type="text" id="sBlood" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-20 font-semibold">Protozoa:</span><input type="text" id="sProtozoa" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-20 font-semibold">Helminthes:</span><input type="text" id="sHelminthes" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-20 font-semibold">Occult Blood:</span><input type="text" id="sOccult" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-20 font-semibold">Other:</span><input type="text" id="sOther" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Colour:</span><input type="text" id="sColor" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Pus Cell:</span><input type="text" id="sPus" class="res-input" placeholder="/HPF"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Consistency:</span><input type="text" id="sConsistency" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">RBC:</span><input type="text" id="sRbc" class="res-input" placeholder="/HPF"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Mucous:</span><input type="text" id="sMucous" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-20 font-semibold">Blood:</span><input type="text" id="sBlood" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-20 font-semibold">Protozoa:</span><input type="text" id="sProtozoa" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-20 font-semibold">Helminthes:</span><input type="text" id="sHelminthes" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-20 font-semibold">Occult Blood:</span><input type="text" id="sOccult" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-20 font-semibold">Other:</span><input type="text" id="sOther" class="res-input"></div>
               </div>
             </div>
 
             <!-- SEMEN ANALYSIS -->
-            <div class="border border-slate-400 rounded overflow-hidden">
+            <div class="test-block border border-slate-400 rounded overflow-hidden">
               <div class="bg-slate-100 font-extrabold px-2 py-0.5 border-b border-slate-400 text-center text-[10px]">SEMEN ANALYSIS</div>
               <div class="grid grid-cols-2 gap-x-2 gap-y-1 p-1.5 text-[9.5px]">
-                <div class="flex items-center col-span-2"><span class="w-24 font-semibold">Collection Time:</span><input type="text" id="semenCollect" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-28 font-semibold">Examination time:</span><input type="text" id="semenExam" class="res-input"></div>
-                <div class="flex items-center"><span class="w-16 font-semibold">Colour:</span><input type="text" id="semenColor" class="res-input"></div>
-                <div class="flex items-center"><span class="w-12 font-semibold">pH:</span><input type="text" id="semenPh" class="res-input"></div>
-                <div class="flex items-center"><span class="w-16 font-semibold">Viscosity:</span><input type="text" id="semenViscosity" class="res-input"></div>
-                <div class="flex items-center"><span class="w-12 font-semibold">Motility:</span><input type="text" id="semenMotility" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-20 font-semibold">Morphology:</span><input type="text" id="semenMorph" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-28 font-semibold">Total Sperm count:</span><input type="text" id="semenCount" class="res-input"></div>
-                <div class="flex items-center col-span-2"><span class="w-16 font-semibold">Others:</span><input type="text" id="semenOthers" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-24 font-semibold">Collection Time:</span><input type="text" id="semenCollect" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-28 font-semibold">Exam Time:</span><input type="text" id="semenExam" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-16 font-semibold">Colour:</span><input type="text" id="semenColor" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-12 font-semibold">pH:</span><input type="text" id="semenPh" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-16 font-semibold">Viscosity:</span><input type="text" id="semenViscosity" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-12 font-semibold">Motility:</span><input type="text" id="semenMotility" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-20 font-semibold">Morphology:</span><input type="text" id="semenMorph" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-28 font-semibold">Sperm Count:</span><input type="text" id="semenCount" class="res-input"></div>
+                <div class="test-field flex items-center col-span-2"><span class="w-16 font-semibold">Others:</span><input type="text" id="semenOthers" class="res-input"></div>
               </div>
             </div>
 
             <!-- SPUTUM ANALYSIS -->
-            <div class="border border-slate-400 rounded overflow-hidden">
+            <div class="test-block border border-slate-400 rounded overflow-hidden">
               <div class="bg-slate-100 font-extrabold px-2 py-0.5 border-b border-slate-400 text-center text-[10px]">SPUTUM ANALYSIS</div>
               <div class="p-1.5 space-y-1 text-[9.5px]">
-                <div class="flex items-center"><span class="w-8 font-semibold">1st:</span><input type="text" id="sputum1" class="res-input"></div>
-                <div class="flex items-center"><span class="w-8 font-semibold">2nd:</span><input type="text" id="sputum2" class="res-input"></div>
-                <div class="flex items-center"><span class="w-8 font-semibold">3rd:</span><input type="text" id="sputum3" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-8 font-semibold">1st:</span><input type="text" id="sputum1" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-8 font-semibold">2nd:</span><input type="text" id="sputum2" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-8 font-semibold">3rd:</span><input type="text" id="sputum3" class="res-input"></div>
               </div>
             </div>
 
             <!-- MISCELLANEOUS -->
-            <div class="border border-slate-400 rounded overflow-hidden">
+            <div class="test-block border border-slate-400 rounded overflow-hidden">
               <div class="bg-slate-100 font-extrabold px-2 py-0.5 border-b border-slate-400 text-center text-[10px]">MISCELLANEOUS</div>
               <div class="p-1.5 space-y-1 text-[9.5px]">
-                <div class="flex items-center"><span class="w-24 font-semibold">Mountoux Test:</span><input type="text" id="mountoux" class="res-input"></div>
-                <div class="flex items-center"><span class="w-24 font-semibold">Ohter:</span><input type="text" id="miscOther" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-24 font-semibold">Mountoux Test:</span><input type="text" id="mountoux" class="res-input"></div>
+                <div class="test-field flex items-center"><span class="w-24 font-semibold">Other:</span><input type="text" id="miscOther" class="res-input"></div>
               </div>
             </div>
 
@@ -410,6 +414,55 @@
       document.getElementById('loginModal').classList.remove('hidden');
       document.getElementById('userInput').value = '';
       document.getElementById('passInput').value = '';
+    }
+
+    // Dynamic Filter & Clean Print Logic
+    function printReport() {
+      const blocks = document.querySelectorAll('.test-block');
+      
+      // 1. Hide empty rows/fields
+      blocks.forEach(block => {
+        let hasValue = false;
+        
+        // Check Table Rows
+        const rows = block.querySelectorAll('tr.test-row');
+        rows.forEach(row => {
+          const input = row.querySelector('input');
+          if (input && input.value.trim() !== "") {
+            hasValue = true;
+            row.classList.remove('hide-in-print');
+          } else if (input) {
+            row.classList.add('hide-in-print');
+          }
+        });
+
+        // Check Grid Test Fields (Urine, Stool, Semen, etc.)
+        const fields = block.querySelectorAll('.test-field');
+        fields.forEach(field => {
+          const input = field.querySelector('input');
+          if (input && input.value.trim() !== "") {
+            hasValue = true;
+            field.classList.remove('hide-in-print');
+          } else if (input) {
+            field.classList.add('hide-in-print');
+          }
+        });
+
+        // Hide whole section block if no tests recorded
+        if (!hasValue) {
+          block.classList.add('hide-in-print');
+        } else {
+          block.classList.remove('hide-in-print');
+        }
+      });
+
+      // 2. Trigger Print Dialog
+      window.print();
+
+      // 3. Restore all elements back after print
+      setTimeout(() => {
+        document.querySelectorAll('.hide-in-print').forEach(el => el.classList.remove('hide-in-print'));
+      }, 500);
     }
 
     function analyzeWithAI() {
