@@ -234,103 +234,129 @@
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
                 <th class="p-1 border-r border-slate-300">Parameters</th>
-                <th class="p-1">Result</th>
+                <th class="p-1 border-r border-slate-300 w-24">Result</th>
+                <th class="p-1">Normal Range</th>
               </tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HIV Ⅰ:</td><td class="p-1"><input type="text" id="hiv" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HBsAg:</td><td class="p-1"><input type="text" id="hbsag" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HCV:</td><td class="p-1"><input type="text" id="hcv" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">VDRL/RPR:</td><td class="p-1"><input type="text" id="vdrl" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">TPHA:</td><td class="p-1"><input type="text" id="tpha" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RA factor:</td><td class="p-1"><input type="text" id="raFactor" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">CRP:</td><td class="p-1"><input type="text" id="crp" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Asotitre:</td><td class="p-1"><input type="text" id="asotitre" class="res-input"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HIV Ⅰ:</td><td class="p-1 border-r border-slate-200"><input type="text" id="hiv" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HBsAg:</td><td class="p-1 border-r border-slate-200"><input type="text" id="hbsag" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HCV:</td><td class="p-1 border-r border-slate-200"><input type="text" id="hcv" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">VDRL/RPR:</td><td class="p-1 border-r border-slate-200"><input type="text" id="vdrl" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">TPHA:</td><td class="p-1 border-r border-slate-200"><input type="text" id="tpha" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RA factor:</td><td class="p-1 border-r border-slate-200"><input type="text" id="raFactor" class="res-input"></td><td class="p-1 text-slate-500">&lt; 8 IU/mL</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">CRP:</td><td class="p-1 border-r border-slate-200"><input type="text" id="crp" class="res-input"></td><td class="p-1 text-slate-500">&lt; 6 mg/L</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Asotitre:</td><td class="p-1 border-r border-slate-200"><input type="text" id="asotitre" class="res-input"></td><td class="p-1 text-slate-500">&lt; 200 IU/mL</td></tr>
               
-              <tr class="sub-header-row bg-red-50 font-bold text-red-700"><td colspan="2" class="p-1 border-y border-slate-300 text-[9px]">Widal Test:</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Typhi 'O':</td><td class="p-1"><input type="text" id="widalO" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Typhi 'H':</td><td class="p-1"><input type="text" id="widalH" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Paratyphi 'AH':</td><td class="p-1"><input type="text" id="widalAH" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Paratyphi 'BH':</td><td class="p-1"><input type="text" id="widalBH" class="res-input"></td></tr>
+              <tr class="sub-header-row bg-red-50 font-bold text-red-700"><td colspan="3" class="p-1 border-y border-slate-300 text-[9px]">Widal Test:</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Typhi 'O':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalO" class="res-input"></td><td class="p-1 text-slate-500">&lt; 1:80 (Negative)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Typhi 'H':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalH" class="res-input"></td><td class="p-1 text-slate-500">&lt; 1:80 (Negative)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Paratyphi 'AH':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalAH" class="res-input"></td><td class="p-1 text-slate-500">&lt; 1:80 (Negative)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Paratyphi 'BH':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalBH" class="res-input"></td><td class="p-1 text-slate-500">&lt; 1:80 (Negative)</td></tr>
               
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">H.Pylori (Ab):</td><td class="p-1"><input type="text" id="hpyloriAb" class="res-input"></td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">H.Pylori (Ag):</td><td class="p-1"><input type="text" id="hpyloriAg" class="res-input"></td></tr>
-              <tr class="test-row"><td class="p-1 border-r border-slate-200">Others:</td><td class="p-1"><input type="text" id="seroOthers" class="res-input"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">H.Pylori (Ab):</td><td class="p-1 border-r border-slate-200"><input type="text" id="hpyloriAb" class="res-input"></td><td class="p-1 text-slate-500">Negative</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">H.Pylori (Ag):</td><td class="p-1 border-r border-slate-200"><input type="text" id="hpyloriAg" class="res-input"></td><td class="p-1 text-slate-500">Negative</td></tr>
+              <tr class="test-row"><td class="p-1 border-r border-slate-200">Others:</td><td colspan="2" class="p-1"><input type="text" id="seroOthers" class="res-input"></td></tr>
             </table>
           </div>
 
           <!-- REPORT ON URINE TEST -->
           <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Urine Analysis Statement</div>
-            <div class="grid grid-cols-2 gap-x-2 gap-y-1 p-2 text-[10px]">
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Colour:</span><input type="text" id="uColor" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">RBC:</span><input type="text" id="uRbc" class="res-input" placeholder="/HPF"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Transparency:</span><input type="text" id="uTrans" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Pus Cell:</span><input type="text" id="uPus" class="res-input" placeholder="/HPF"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">pH:</span><input type="text" id="uPh" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Epi Cell:</span><input type="text" id="uEpi" class="res-input" placeholder="/HPF"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Sugar:</span><input type="text" id="uSugar" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Cast Cell:</span><input type="text" id="uCast" class="res-input" placeholder="/HPF"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Albumin:</span><input type="text" id="uAlbumin" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Crystal:</span><input type="text" id="uCrystal" class="res-input" placeholder="/HPF"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-32 font-semibold text-red-700">Bile Salt/Pigment:</span><input type="text" id="uBile" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Urobilinogen:</span><input type="text" id="uUrobilinogen" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Ca-oxalates:</span><input type="text" id="uCaOxalates" class="res-input" placeholder="/HPF"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Acetone:</span><input type="text" id="uAcetone" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Bacteria:</span><input type="text" id="uBacteria" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-32 font-semibold text-red-700">Pregnancy Test:</span><input type="text" id="uPregnancy" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-24 font-semibold text-red-700">Other:</span><input type="text" id="uOther" class="res-input"></div>
-            </div>
+            <table class="w-full text-left border-collapse">
+              <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
+                <th class="p-1 border-r border-slate-300">Parameters</th>
+                <th class="p-1 border-r border-slate-300 w-24">Result</th>
+                <th class="p-1">Normal Range</th>
+              </tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Colour</td><td class="p-1 border-r border-slate-200"><input type="text" id="uColor" class="res-input"></td><td class="p-1 text-slate-500">Pale Yellow / Amber</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Transparency</td><td class="p-1 border-r border-slate-200"><input type="text" id="uTrans" class="res-input"></td><td class="p-1 text-slate-500">Clear</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">pH</td><td class="p-1 border-r border-slate-200"><input type="text" id="uPh" class="res-input"></td><td class="p-1 text-slate-500">4.5 - 8.0</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Sugar</td><td class="p-1 border-r border-slate-200"><input type="text" id="uSugar" class="res-input"></td><td class="p-1 text-slate-500">Nil</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Albumin</td><td class="p-1 border-r border-slate-200"><input type="text" id="uAlbumin" class="res-input"></td><td class="p-1 text-slate-500">Nil</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bile Salt/Pigment</td><td class="p-1 border-r border-slate-200"><input type="text" id="uBile" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Urobilinogen</td><td class="p-1 border-r border-slate-200"><input type="text" id="uUrobilinogen" class="res-input"></td><td class="p-1 text-slate-500">0.1 - 1.0 mg/dL</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Acetone</td><td class="p-1 border-r border-slate-200"><input type="text" id="uAcetone" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RBC</td><td class="p-1 border-r border-slate-200"><input type="text" id="uRbc" class="res-input"></td><td class="p-1 text-slate-500">0 - 2 /HPF</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Pus Cell</td><td class="p-1 border-r border-slate-200"><input type="text" id="uPus" class="res-input"></td><td class="p-1 text-slate-500">0 - 4 /HPF</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Epi Cell</td><td class="p-1 border-r border-slate-200"><input type="text" id="uEpi" class="res-input"></td><td class="p-1 text-slate-500">Occasional /HPF</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Cast Cell</td><td class="p-1 border-r border-slate-200"><input type="text" id="uCast" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Crystal</td><td class="p-1 border-r border-slate-200"><input type="text" id="uCrystal" class="res-input"></td><td class="p-1 text-slate-500">Nil</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Ca-oxalates</td><td class="p-1 border-r border-slate-200"><input type="text" id="uCaOxalates" class="res-input"></td><td class="p-1 text-slate-500">Nil / Occasional</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bacteria</td><td class="p-1 border-r border-slate-200"><input type="text" id="uBacteria" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Pregnancy Test</td><td class="p-1 border-r border-slate-200"><input type="text" id="uPregnancy" class="res-input"></td><td class="p-1 text-slate-500">Negative</td></tr>
+              <tr class="test-row"><td class="p-1 border-r border-slate-200">Other</td><td colspan="2" class="p-1"><input type="text" id="uOther" class="res-input"></td></tr>
+            </table>
           </div>
 
           <!-- REPORT ON STOOL TEST -->
           <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Stool Analysis Statement</div>
-            <div class="grid grid-cols-2 gap-x-2 gap-y-1 p-2 text-[10px]">
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Colour:</span><input type="text" id="sColor" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Pus Cell:</span><input type="text" id="sPus" class="res-input" placeholder="/HPF"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Consistency:</span><input type="text" id="sConsistency" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">RBC:</span><input type="text" id="sRbc" class="res-input" placeholder="/HPF"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Mucous:</span><input type="text" id="sMucous" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-24 font-semibold text-red-700">Blood:</span><input type="text" id="sBlood" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-24 font-semibold text-red-700">Protozoa:</span><input type="text" id="sProtozoa" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-24 font-semibold text-red-700">Helminthes:</span><input type="text" id="sHelminthes" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-24 font-semibold text-red-700">Occult Blood:</span><input type="text" id="sOccult" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-24 font-semibold text-red-700">Other:</span><input type="text" id="sOther" class="res-input"></div>
-            </div>
+            <table class="w-full text-left border-collapse">
+              <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
+                <th class="p-1 border-r border-slate-300">Parameters</th>
+                <th class="p-1 border-r border-slate-300 w-24">Result</th>
+                <th class="p-1">Normal Range</th>
+              </tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Colour</td><td class="p-1 border-r border-slate-200"><input type="text" id="sColor" class="res-input"></td><td class="p-1 text-slate-500">Brown</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Consistency</td><td class="p-1 border-r border-slate-200"><input type="text" id="sConsistency" class="res-input"></td><td class="p-1 text-slate-500">Formed</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Mucous</td><td class="p-1 border-r border-slate-200"><input type="text" id="sMucous" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Pus Cell</td><td class="p-1 border-r border-slate-200"><input type="text" id="sPus" class="res-input"></td><td class="p-1 text-slate-500">0 - 2 /HPF</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RBC</td><td class="p-1 border-r border-slate-200"><input type="text" id="sRbc" class="res-input"></td><td class="p-1 text-slate-500">Nil</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Blood</td><td class="p-1 border-r border-slate-200"><input type="text" id="sBlood" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Protozoa</td><td class="p-1 border-r border-slate-200"><input type="text" id="sProtozoa" class="res-input"></td><td class="p-1 text-slate-500">None Seen</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Helminthes</td><td class="p-1 border-r border-slate-200"><input type="text" id="sHelminthes" class="res-input"></td><td class="p-1 text-slate-500">None Seen</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Occult Blood</td><td class="p-1 border-r border-slate-200"><input type="text" id="sOccult" class="res-input"></td><td class="p-1 text-slate-500">Negative</td></tr>
+              <tr class="test-row"><td class="p-1 border-r border-slate-200">Other</td><td colspan="2" class="p-1"><input type="text" id="sOther" class="res-input"></td></tr>
+            </table>
           </div>
 
           <!-- SEMEN ANALYSIS -->
           <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Semen Analysis Statement</div>
-            <div class="grid grid-cols-2 gap-x-2 gap-y-1 p-2 text-[10px]">
-              <div class="test-field flex items-center col-span-2"><span class="w-28 font-semibold text-red-700">Collection Time:</span><input type="text" id="semenCollect" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-28 font-semibold text-red-700">Exam Time:</span><input type="text" id="semenExam" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-20 font-semibold text-red-700">Colour:</span><input type="text" id="semenColor" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-16 font-semibold text-red-700">pH:</span><input type="text" id="semenPh" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-20 font-semibold text-red-700">Viscosity:</span><input type="text" id="semenViscosity" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-16 font-semibold text-red-700">Motility:</span><input type="text" id="semenMotility" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-24 font-semibold text-red-700">Morphology:</span><input type="text" id="semenMorph" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-32 font-semibold text-red-700">Sperm Count:</span><input type="text" id="semenCount" class="res-input"></div>
-              <div class="test-field flex items-center col-span-2"><span class="w-20 font-semibold text-red-700">Others:</span><input type="text" id="semenOthers" class="res-input"></div>
-            </div>
+            <table class="w-full text-left border-collapse">
+              <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
+                <th class="p-1 border-r border-slate-300">Parameters</th>
+                <th class="p-1 border-r border-slate-300 w-24">Result</th>
+                <th class="p-1">Normal Range</th>
+              </tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Collection Time</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenCollect" class="res-input"></td><td class="p-1 text-slate-500">-</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Exam Time</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenExam" class="res-input"></td><td class="p-1 text-slate-500">Within 1 hour</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Colour</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenColor" class="res-input"></td><td class="p-1 text-slate-500">Grey-White / Opalescent</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">pH</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenPh" class="res-input"></td><td class="p-1 text-slate-500">7.2 - 8.0</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Viscosity</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenViscosity" class="res-input"></td><td class="p-1 text-slate-500">Normal (Liquefaction in 20-30 min)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Motility</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenMotility" class="res-input"></td><td class="p-1 text-slate-500">&gt; 50% Active Forward</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Morphology</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenMorph" class="res-input"></td><td class="p-1 text-slate-500">&gt; 30% Normal Forms</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Sperm Count</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenCount" class="res-input"></td><td class="p-1 text-slate-500">15 - 200 Million / mL</td></tr>
+              <tr class="test-row"><td class="p-1 border-r border-slate-200">Others</td><td colspan="2" class="p-1"><input type="text" id="semenOthers" class="res-input"></td></tr>
+            </table>
           </div>
 
           <!-- SPUTUM ANALYSIS -->
           <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Sputum Analysis Statement</div>
-            <div class="p-2 space-y-1 text-[10px]">
-              <div class="test-field flex items-center"><span class="w-12 font-semibold text-red-700">1st:</span><input type="text" id="sputum1" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-12 font-semibold text-red-700">2nd:</span><input type="text" id="sputum2" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-12 font-semibold text-red-700">3rd:</span><input type="text" id="sputum3" class="res-input"></div>
-            </div>
+            <table class="w-full text-left border-collapse">
+              <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
+                <th class="p-1 border-r border-slate-300">Parameters</th>
+                <th class="p-1 border-r border-slate-300 w-24">Result</th>
+                <th class="p-1">Normal Range</th>
+              </tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">1st (Spot)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sputum1" class="res-input"></td><td class="p-1 text-slate-500">Negative for AFB</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">2nd (Morning)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sputum2" class="res-input"></td><td class="p-1 text-slate-500">Negative for AFB</td></tr>
+              <tr class="test-row"><td class="p-1 border-r border-slate-200">3rd (Spot)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sputum3" class="res-input"></td><td class="p-1 text-slate-500">Negative for AFB</td></tr>
+            </table>
           </div>
 
           <!-- MISCELLANEOUS -->
           <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Miscellaneous Statement</div>
-            <div class="p-2 space-y-1 text-[10px]">
-              <div class="test-field flex items-center"><span class="w-28 font-semibold text-red-700">Mountoux Test:</span><input type="text" id="mountoux" class="res-input"></div>
-              <div class="test-field flex items-center"><span class="w-28 font-semibold text-red-700">Other:</span><input type="text" id="miscOther" class="res-input"></div>
-            </div>
+            <table class="w-full text-left border-collapse">
+              <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
+                <th class="p-1 border-r border-slate-300">Parameters</th>
+                <th class="p-1 border-r border-slate-300 w-24">Result</th>
+                <th class="p-1">Normal Range</th>
+              </tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Mountoux Test</td><td class="p-1 border-r border-slate-200"><input type="text" id="mountoux" class="res-input"></td><td class="p-1 text-slate-500">&lt; 10 mm induration (Negative)</td></tr>
+              <tr class="test-row"><td class="p-1 border-r border-slate-200">Other</td><td colspan="2" class="p-1"><input type="text" id="miscOther" class="res-input"></td></tr>
+            </table>
           </div>
 
         </div>
@@ -426,18 +452,6 @@
           }
         });
 
-        // Check Grid Test Fields (Urine, Stool, Semen, etc.)
-        const fields = block.querySelectorAll('.test-field');
-        fields.forEach(field => {
-          const input = field.querySelector('input');
-          if (input && input.value.trim() !== "") {
-            hasValue = true;
-            field.style.display = '';
-          } else if (input) {
-            field.style.display = 'none';
-          }
-        });
-
         // Completely hide the block if empty so it leaves no gap
         if (!hasValue) {
           block.style.display = 'none';
@@ -455,7 +469,6 @@
           block.style.display = 'block';
         });
         document.querySelectorAll('tr.test-row').forEach(r => r.style.display = '');
-        document.querySelectorAll('.test-field').forEach(f => f.style.display = '');
       }, 500);
     }
 
