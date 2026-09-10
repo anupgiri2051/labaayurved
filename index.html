@@ -36,6 +36,15 @@
       box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.15);
     }
 
+    /* Extra Bold Highlight Style specifically designed for Abnormal/Positive results during Print & Screen */
+    .res-input.abnormal-highlight {
+      font-weight: 900 !important;
+      color: #dc2626 !important;
+      background-color: #fef2f2 !important;
+      border: 1.5px solid #dc2626 !important;
+      font-size: 11px !important;
+    }
+
     /* Sequential Flow Print Layout without Gaps & Strict Top Alignment */
     @media print {
       @page {
@@ -64,6 +73,14 @@
         background: transparent !important;
         padding: 0 !important;
       }
+      /* Ensure printed abnormal highlights stand out vividly with underline/boldness */
+      .res-input.abnormal-highlight {
+        border: none !important;
+        background: transparent !important;
+        font-weight: 900 !important;
+        color: #000000 !important;
+        text-decoration: underline;
+      }
       input { 
         border: none !important; 
         background: transparent !important; 
@@ -82,7 +99,7 @@
       <div class="text-center mb-4">
         <h3 class="text-xs font-bold text-red-700 uppercase tracking-widest">Government of Gandaki Province</h3>
         <h2 class="text-xl font-black text-red-700">Dhaulagiri Ayurveda Hospital, Baglung</h2>
-        <p class="text-xs text-slate-500 font-semibold mt-1">Laboratory Statement System | Phone: 068-520031</p>
+        <p class="text-xs text-slate-500 font-semibold mt-1">Laboratory Management System | Phone: 068-520031</p>
       </div>
       <div id="loginError" class="hidden mb-3 p-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded text-center font-bold">
         User ID वा Password मिलेन! (ID: admin | Pass: admin123)
@@ -116,7 +133,7 @@
         <button onclick="saveRecord()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded text-xs transition">💾 Save Record</button>
         <button onclick="toggleRecordsModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-3 py-1.5 rounded text-xs transition">📁 View Records</button>
         <button onclick="printReport()" class="bg-red-700 hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded text-xs transition">🖨️ Print Report</button>
-        <button onclick="document.getElementById('reportForm').reset(); setTodayDate();" class="bg-slate-100 border border-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded text-xs transition">Clear</button>
+        <button onclick="document.getElementById('reportForm').reset(); setTodayDate(); clearHighlights();" class="bg-slate-100 border border-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded text-xs transition">Clear</button>
         <button onclick="exitApp()" class="bg-slate-900 text-white font-bold px-3 py-1.5 rounded text-xs transition">Logout</button>
       </div>
     </div>
@@ -135,7 +152,7 @@
             <div class="text-center flex-grow px-2">
               <h3 class="text-[10px] font-bold text-red-700 uppercase tracking-widest">Government of Gandaki Province</h3>
               <h1 class="text-sm font-black text-red-700 tracking-wide uppercase">Dhaulagiri Ayurveda Hospital, Baglung</h1>
-              <h2 class="text-[11px] font-extrabold text-slate-900 uppercase tracking-wider mt-0.5">Laboratory Statement Report</h2>
+              <h2 class="text-[11px] font-extrabold text-slate-900 uppercase tracking-wider mt-0.5">Laboratory Report</h2>
             </div>
             <div class="text-right text-[10px] font-bold text-red-700 border border-red-200 p-1.5 rounded bg-red-50/50">
               <p>Ph: 068-520031</p>
@@ -147,7 +164,7 @@
         <div class="border border-slate-400 bg-slate-50/50 rounded-lg p-2 mb-2 grid grid-cols-3 gap-x-3 gap-y-1 text-[10px]">
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Patient:</span><input type="text" id="pName" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-bold text-slate-900" required></div>
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Age/Sex:</span><input type="text" id="pAgeSex" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold"></div>
-          <div class="flex items-center"><span class="font-bold w-16 text-red-700">Lab No.:</span><input type="text" id="pLabNo" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-bold text-red-700" required></div>
+          <div class="flex items-center"><span class="font-bold w-16 text-slate-700">Lab No.:</span><input type="text" id="pLabNo" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-bold text-slate-900" required></div>
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Address:</span><input type="text" id="pAddress" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1"></div>
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Ref. By:</span><input type="text" id="pRefBy" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1"></div>
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Date:</span><input type="text" id="reportDate" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold"></div>
@@ -163,31 +180,31 @@
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
                 <th class="p-1 border-r border-slate-300">Parameters</th>
                 <th class="p-1 border-r border-slate-300 w-24">Result</th>
-                <th class="p-1">Normal Range</th>
+                <th class="p-1 text-slate-900 font-bold">Normal Range</th>
               </tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">WBC</td><td class="p-1 border-r border-slate-200"><input type="text" id="wbc" class="res-input"></td><td class="p-1 text-slate-500">4000-11000/uL</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RBC</td><td class="p-1 border-r border-slate-200"><input type="text" id="rbc" class="res-input"></td><td class="p-1 text-slate-500">4.0-5.5x10⁶/uL</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Platelets</td><td class="p-1 border-r border-slate-200"><input type="text" id="platelets" class="res-input"></td><td class="p-1 text-slate-500">1.5-4.0 Lakhs</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">WBC</td><td class="p-1 border-r border-slate-200"><input type="text" id="wbc" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">4000-11000/uL</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RBC</td><td class="p-1 border-r border-slate-200"><input type="text" id="rbc" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">4.0-5.5x10⁶/uL</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Platelets</td><td class="p-1 border-r border-slate-200"><input type="text" id="platelets" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">1.5-4.0 Lakhs</td></tr>
               
               <tr class="sub-header-row bg-red-50 font-bold text-red-700"><td colspan="3" class="p-1 border-y border-slate-300 text-[9px]">DIFFERENTIAL COUNT</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Neutrophil</td><td class="p-1 border-r border-slate-200"><input type="text" id="neutrophil" class="res-input"></td><td class="p-1 text-slate-500">45-75%</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Lymphocyte</td><td class="p-1 border-r border-slate-200"><input type="text" id="lymphocyte" class="res-input"></td><td class="p-1 text-slate-500">20-45%</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Eosinophil</td><td class="p-1 border-r border-slate-200"><input type="text" id="eosinophil" class="res-input"></td><td class="p-1 text-slate-500">1-6%</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Monocyte</td><td class="p-1 border-r border-slate-200"><input type="text" id="monocyte" class="res-input"></td><td class="p-1 text-slate-500">2-10%</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Basophil</td><td class="p-1 border-r border-slate-200"><input type="text" id="basophil" class="res-input"></td><td class="p-1 text-slate-500">0-1%</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Neutrophil</td><td class="p-1 border-r border-slate-200"><input type="text" id="neutrophil" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">45-75%</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Lymphocyte</td><td class="p-1 border-r border-slate-200"><input type="text" id="lymphocyte" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">20-45%</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Eosinophil</td><td class="p-1 border-r border-slate-200"><input type="text" id="eosinophil" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">1-6%</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Monocyte</td><td class="p-1 border-r border-slate-200"><input type="text" id="monocyte" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">2-10%</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-2">Basophil</td><td class="p-1 border-r border-slate-200"><input type="text" id="basophil" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">0-1%</td></tr>
               
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 font-semibold">Hemoglobin</td><td class="p-1 border-r border-slate-200"><input type="text" id="hb" class="res-input"></td><td class="p-1 text-slate-500">M:12-17, F:11-16g</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">PCV</td><td class="p-1 border-r border-slate-200"><input type="text" id="pcv" class="res-input"></td><td class="p-1 text-slate-500">35-55%</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">MCV</td><td class="p-1 border-r border-slate-200"><input type="text" id="mcv" class="res-input"></td><td class="p-1 text-slate-500">82-92 fl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">MCH</td><td class="p-1 border-r border-slate-200"><input type="text" id="mch" class="res-input"></td><td class="p-1 text-slate-500">27-32 pg</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">MCHC</td><td class="p-1 border-r border-slate-200"><input type="text" id="mchc" class="res-input"></td><td class="p-1 text-slate-500">32-36%</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">ESR</td><td class="p-1 border-r border-slate-200"><input type="text" id="esr" class="res-input"></td><td class="p-1 text-slate-500">M:0-10, F:0-20mm</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bleeding Time (B.T)</td><td class="p-1 border-r border-slate-200"><input type="text" id="bt" class="res-input"></td><td class="p-1 text-slate-500">2-6 min.</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Clotting Time (C.T.)</td><td class="p-1 border-r border-slate-200"><input type="text" id="ct" class="res-input"></td><td class="p-1 text-slate-500">4-9 min.</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Prothrombin Time</td><td class="p-1 border-r border-slate-200"><input type="text" id="pt" class="res-input"></td><td class="p-1 text-slate-500">14±2 sec.</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">INR</td><td class="p-1 border-r border-slate-200"><input type="text" id="inr" class="res-input"></td><td class="p-1 text-slate-500">-</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Malaria Parasite</td><td class="p-1 border-r border-slate-200"><input type="text" id="mp" class="res-input"></td><td class="p-1 text-slate-500">-</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 font-semibold">Blood Group/Rh</td><td class="p-1 border-r border-slate-200"><input type="text" id="bloodGroup" class="res-input font-bold text-red-700"></td><td class="p-1 text-slate-500">-</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 font-semibold">Hemoglobin</td><td class="p-1 border-r border-slate-200"><input type="text" id="hb" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">M:12-17, F:11-16g</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">PCV</td><td class="p-1 border-r border-slate-200"><input type="text" id="pcv" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">35-55%</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">MCV</td><td class="p-1 border-r border-slate-200"><input type="text" id="mcv" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">82-92 fl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">MCH</td><td class="p-1 border-r border-slate-200"><input type="text" id="mch" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">27-32 pg</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">MCHC</td><td class="p-1 border-r border-slate-200"><input type="text" id="mchc" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">32-36%</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">ESR</td><td class="p-1 border-r border-slate-200"><input type="text" id="esr" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">M:0-10, F:0-20mm</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bleeding Time (B.T)</td><td class="p-1 border-r border-slate-200"><input type="text" id="bt" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">2-6 min.</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Clotting Time (C.T.)</td><td class="p-1 border-r border-slate-200"><input type="text" id="ct" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">4-9 min.</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Prothrombin Time</td><td class="p-1 border-r border-slate-200"><input type="text" id="pt" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">14±2 sec.</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">INR</td><td class="p-1 border-r border-slate-200"><input type="text" id="inr" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">-</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Malaria Parasite</td><td class="p-1 border-r border-slate-200"><input type="text" id="mp" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">-</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 font-semibold">Blood Group/Rh</td><td class="p-1 border-r border-slate-200"><input type="text" id="bloodGroup" class="res-input font-bold text-red-700" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">-</td></tr>
               <tr class="test-row"><td class="p-1 border-r border-slate-200">Others</td><td colspan="2" class="p-1"><input type="text" id="haemaOthers" class="res-input"></td></tr>
             </table>
           </div>
@@ -199,31 +216,31 @@
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
                 <th class="p-1 border-r border-slate-300">Parameters</th>
                 <th class="p-1 border-r border-slate-300 w-24">Result</th>
-                <th class="p-1">Normal Range</th>
+                <th class="p-1 text-slate-900 font-bold">Normal Range</th>
               </tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">B.Sugar (F)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sugarF" class="res-input"></td><td class="p-1 text-slate-500">60-110mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">B.Sugar (PP)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sugarPP" class="res-input"></td><td class="p-1 text-slate-500">70-140mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">B. Sugar (R)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sugarR" class="res-input"></td><td class="p-1 text-slate-500">&lt;140mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Urea</td><td class="p-1 border-r border-slate-200"><input type="text" id="urea" class="res-input"></td><td class="p-1 text-slate-500">15-45mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">S. Creatinine</td><td class="p-1 border-r border-slate-200"><input type="text" id="creatinine" class="res-input"></td><td class="p-1 text-slate-500">0.4-1.4mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Sodium (Na⁺)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sodium" class="res-input"></td><td class="p-1 text-slate-500">135-145mEq/L</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Potassium (K⁺)</td><td class="p-1 border-r border-slate-200"><input type="text" id="potassium" class="res-input"></td><td class="p-1 text-slate-500">3.5-5.5mEq/L</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bilirubin (T)</td><td class="p-1 border-r border-slate-200"><input type="text" id="biliT" class="res-input"></td><td class="p-1 text-slate-500">0.4-1.2mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bilirubin (D)</td><td class="p-1 border-r border-slate-200"><input type="text" id="biliD" class="res-input"></td><td class="p-1 text-slate-500">&lt;0.3mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bilirubin (I)</td><td class="p-1 border-r border-slate-200"><input type="text" id="biliI" class="res-input"></td><td class="p-1 text-slate-500">0.1-0.8mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">SGOT</td><td class="p-1 border-r border-slate-200"><input type="text" id="sgot" class="res-input"></td><td class="p-1 text-slate-500">10-40 U/L</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">SGPT</td><td class="p-1 border-r border-slate-200"><input type="text" id="sgpt" class="res-input"></td><td class="p-1 text-slate-500">10-55 U/L</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">ALP</td><td class="p-1 border-r border-slate-200"><input type="text" id="alp" class="res-input"></td><td class="p-1 text-slate-500">65-306 U/L</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Total Protein</td><td class="p-1 border-r border-slate-200"><input type="text" id="totalProtein" class="res-input"></td><td class="p-1 text-slate-500">6-8g/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Albumin</td><td class="p-1 border-r border-slate-200"><input type="text" id="bioAlbumin" class="res-input"></td><td class="p-1 text-slate-500">3.5-5.5mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Globulin</td><td class="p-1 border-r border-slate-200"><input type="text" id="globulin" class="res-input"></td><td class="p-1 text-slate-500">2.5-3.0mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">A/G Ratio</td><td class="p-1 border-r border-slate-200"><input type="text" id="agRatio" class="res-input"></td><td class="p-1 text-slate-500">1.0-1.8</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Cholesterol</td><td class="p-1 border-r border-slate-200"><input type="text" id="cholesterol" class="res-input"></td><td class="p-1 text-slate-500">150-250mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Triglyceride</td><td class="p-1 border-r border-slate-200"><input type="text" id="triglyceride" class="res-input"></td><td class="p-1 text-slate-500">35-170mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HDL</td><td class="p-1 border-r border-slate-200"><input type="text" id="hdl" class="res-input"></td><td class="p-1 text-slate-500">30-65mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">LDL</td><td class="p-1 border-r border-slate-200"><input type="text" id="ldl" class="res-input"></td><td class="p-1 text-slate-500">70-160mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">VLDL</td><td class="p-1 border-r border-slate-200"><input type="text" id="vldl" class="res-input"></td><td class="p-1 text-slate-500">10-55mg/dl</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Uric Acid</td><td class="p-1 border-r border-slate-200"><input type="text" id="uricAcid" class="res-input"></td><td class="p-1 text-slate-500">M:3.5-7.2, F:2.7-7</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">B.Sugar (F)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sugarF" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">60-110mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">B.Sugar (PP)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sugarPP" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">70-140mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">B. Sugar (R)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sugarR" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt;140mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Urea</td><td class="p-1 border-r border-slate-200"><input type="text" id="urea" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">15-45mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">S. Creatinine</td><td class="p-1 border-r border-slate-200"><input type="text" id="creatinine" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">0.4-1.4mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Sodium (Na⁺)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sodium" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">135-145mEq/L</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Potassium (K⁺)</td><td class="p-1 border-r border-slate-200"><input type="text" id="potassium" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">3.5-5.5mEq/L</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bilirubin (T)</td><td class="p-1 border-r border-slate-200"><input type="text" id="biliT" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">0.4-1.2mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bilirubin (D)</td><td class="p-1 border-r border-slate-200"><input type="text" id="biliD" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt;0.3mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bilirubin (I)</td><td class="p-1 border-r border-slate-200"><input type="text" id="biliI" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">0.1-0.8mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">SGOT</td><td class="p-1 border-r border-slate-200"><input type="text" id="sgot" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">10-40 U/L</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">SGPT</td><td class="p-1 border-r border-slate-200"><input type="text" id="sgpt" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">10-55 U/L</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">ALP</td><td class="p-1 border-r border-slate-200"><input type="text" id="alp" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">65-306 U/L</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Total Protein</td><td class="p-1 border-r border-slate-200"><input type="text" id="totalProtein" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">6-8g/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Albumin</td><td class="p-1 border-r border-slate-200"><input type="text" id="bioAlbumin" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">3.5-5.5mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Globulin</td><td class="p-1 border-r border-slate-200"><input type="text" id="globulin" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">2.5-3.0mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">A/G Ratio</td><td class="p-1 border-r border-slate-200"><input type="text" id="agRatio" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">1.0-1.8</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Cholesterol</td><td class="p-1 border-r border-slate-200"><input type="text" id="cholesterol" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">150-250mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Triglyceride</td><td class="p-1 border-r border-slate-200"><input type="text" id="triglyceride" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">35-170mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HDL</td><td class="p-1 border-r border-slate-200"><input type="text" id="hdl" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">30-65mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">LDL</td><td class="p-1 border-r border-slate-200"><input type="text" id="ldl" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">70-160mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">VLDL</td><td class="p-1 border-r border-slate-200"><input type="text" id="vldl" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">10-55mg/dl</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Uric Acid</td><td class="p-1 border-r border-slate-200"><input type="text" id="uricAcid" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">M:3.5-7.2, F:2.7-7</td></tr>
               <tr class="test-row"><td class="p-1 border-r border-slate-200">Others</td><td colspan="2" class="p-1"><input type="text" id="bioOthers" class="res-input"></td></tr>
             </table>
           </div>
@@ -235,25 +252,25 @@
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
                 <th class="p-1 border-r border-slate-300">Parameters</th>
                 <th class="p-1 border-r border-slate-300 w-24">Result</th>
-                <th class="p-1">Normal Range</th>
+                <th class="p-1 text-slate-900 font-bold">Normal Range</th>
               </tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HIV Ⅰ:</td><td class="p-1 border-r border-slate-200"><input type="text" id="hiv" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HBsAg:</td><td class="p-1 border-r border-slate-200"><input type="text" id="hbsag" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HCV:</td><td class="p-1 border-r border-slate-200"><input type="text" id="hcv" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">VDRL/RPR:</td><td class="p-1 border-r border-slate-200"><input type="text" id="vdrl" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">TPHA:</td><td class="p-1 border-r border-slate-200"><input type="text" id="tpha" class="res-input"></td><td class="p-1 text-slate-500">Non-Reactive</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RA factor:</td><td class="p-1 border-r border-slate-200"><input type="text" id="raFactor" class="res-input"></td><td class="p-1 text-slate-500">&lt; 8 IU/mL</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">CRP:</td><td class="p-1 border-r border-slate-200"><input type="text" id="crp" class="res-input"></td><td class="p-1 text-slate-500">&lt; 6 mg/L</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Asotitre:</td><td class="p-1 border-r border-slate-200"><input type="text" id="asotitre" class="res-input"></td><td class="p-1 text-slate-500">&lt; 200 IU/mL</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HIV:</td><td class="p-1 border-r border-slate-200"><input type="text" id="hiv" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HBsAg:</td><td class="p-1 border-r border-slate-200"><input type="text" id="hbsag" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">HCV:</td><td class="p-1 border-r border-slate-200"><input type="text" id="hcv" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">VDRL/RPR:</td><td class="p-1 border-r border-slate-200"><input type="text" id="vdrl" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">TPHA:</td><td class="p-1 border-r border-slate-200"><input type="text" id="tpha" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">Non-Reactive</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RA factor:</td><td class="p-1 border-r border-slate-200"><input type="text" id="raFactor" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt; 8 IU/mL</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">CRP:</td><td class="p-1 border-r border-slate-200"><input type="text" id="crp" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt; 6 mg/L</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Asotitre:</td><td class="p-1 border-r border-slate-200"><input type="text" id="asotitre" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt; 200 IU/mL</td></tr>
               
               <tr class="sub-header-row bg-red-50 font-bold text-red-700"><td colspan="3" class="p-1 border-y border-slate-300 text-[9px]">Widal Test:</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Typhi 'O':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalO" class="res-input"></td><td class="p-1 text-slate-500">&lt; 1:80 (Negative)</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Typhi 'H':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalH" class="res-input"></td><td class="p-1 text-slate-500">&lt; 1:80 (Negative)</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Paratyphi 'AH':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalAH" class="res-input"></td><td class="p-1 text-slate-500">&lt; 1:80 (Negative)</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Paratyphi 'BH':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalBH" class="res-input"></td><td class="p-1 text-slate-500">&lt; 1:80 (Negative)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Typhi 'O':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalO" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt; 1:80 (Negative)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Typhi 'H':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalH" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt; 1:80 (Negative)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Paratyphi 'AH':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalAH" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt; 1:80 (Negative)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200 pl-3">S.Paratyphi 'BH':</td><td class="p-1 border-r border-slate-200"><input type="text" id="widalBH" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt; 1:80 (Negative)</td></tr>
               
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">H.Pylori (Ab):</td><td class="p-1 border-r border-slate-200"><input type="text" id="hpyloriAb" class="res-input"></td><td class="p-1 text-slate-500">Negative</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">H.Pylori (Ag):</td><td class="p-1 border-r border-slate-200"><input type="text" id="hpyloriAg" class="res-input"></td><td class="p-1 text-slate-500">Negative</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">H.Pylori (Ab):</td><td class="p-1 border-r border-slate-200"><input type="text" id="hpyloriAb" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">Negative</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">H.Pylori (Ag):</td><td class="p-1 border-r border-slate-200"><input type="text" id="hpyloriAg" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">Negative</td></tr>
               <tr class="test-row"><td class="p-1 border-r border-slate-200">Others:</td><td colspan="2" class="p-1"><input type="text" id="seroOthers" class="res-input"></td></tr>
             </table>
           </div>
@@ -264,26 +281,25 @@
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
                 <th class="p-1 border-r border-slate-300">Parameters</th>
-                <th class="p-1 border-r border-slate-300 w-24">Result</th>
-                <th class="p-1">Normal Range</th>
+                <th class="p-1 w-24">Result</th>
               </tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Colour</td><td class="p-1 border-r border-slate-200"><input type="text" id="uColor" class="res-input"></td><td class="p-1 text-slate-500">Pale Yellow / Amber</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Transparency</td><td class="p-1 border-r border-slate-200"><input type="text" id="uTrans" class="res-input"></td><td class="p-1 text-slate-500">Clear</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">pH</td><td class="p-1 border-r border-slate-200"><input type="text" id="uPh" class="res-input"></td><td class="p-1 text-slate-500">4.5 - 8.0</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Sugar</td><td class="p-1 border-r border-slate-200"><input type="text" id="uSugar" class="res-input"></td><td class="p-1 text-slate-500">Nil</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Albumin</td><td class="p-1 border-r border-slate-200"><input type="text" id="uAlbumin" class="res-input"></td><td class="p-1 text-slate-500">Nil</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bile Salt/Pigment</td><td class="p-1 border-r border-slate-200"><input type="text" id="uBile" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Urobilinogen</td><td class="p-1 border-r border-slate-200"><input type="text" id="uUrobilinogen" class="res-input"></td><td class="p-1 text-slate-500">0.1 - 1.0 mg/dL</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Acetone</td><td class="p-1 border-r border-slate-200"><input type="text" id="uAcetone" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RBC</td><td class="p-1 border-r border-slate-200"><input type="text" id="uRbc" class="res-input"></td><td class="p-1 text-slate-500">0 - 2 /HPF</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Pus Cell</td><td class="p-1 border-r border-slate-200"><input type="text" id="uPus" class="res-input"></td><td class="p-1 text-slate-500">0 - 4 /HPF</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Epi Cell</td><td class="p-1 border-r border-slate-200"><input type="text" id="uEpi" class="res-input"></td><td class="p-1 text-slate-500">Occasional /HPF</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Cast Cell</td><td class="p-1 border-r border-slate-200"><input type="text" id="uCast" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Crystal</td><td class="p-1 border-r border-slate-200"><input type="text" id="uCrystal" class="res-input"></td><td class="p-1 text-slate-500">Nil</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Ca-oxalates</td><td class="p-1 border-r border-slate-200"><input type="text" id="uCaOxalates" class="res-input"></td><td class="p-1 text-slate-500">Nil / Occasional</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bacteria</td><td class="p-1 border-r border-slate-200"><input type="text" id="uBacteria" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Pregnancy Test</td><td class="p-1 border-r border-slate-200"><input type="text" id="uPregnancy" class="res-input"></td><td class="p-1 text-slate-500">Negative</td></tr>
-              <tr class="test-row"><td class="p-1 border-r border-slate-200">Other</td><td colspan="2" class="p-1"><input type="text" id="uOther" class="res-input"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Colour</td><td class="p-1"><input type="text" id="uColor" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Transparency</td><td class="p-1"><input type="text" id="uTrans" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">pH</td><td class="p-1"><input type="text" id="uPh" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Sugar</td><td class="p-1"><input type="text" id="uSugar" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Albumin</td><td class="p-1"><input type="text" id="uAlbumin" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bile Salt/Pigment</td><td class="p-1"><input type="text" id="uBile" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Urobilinogen</td><td class="p-1"><input type="text" id="uUrobilinogen" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Acetone</td><td class="p-1"><input type="text" id="uAcetone" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RBC</td><td class="p-1"><input type="text" id="uRbc" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Pus Cell</td><td class="p-1"><input type="text" id="uPus" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Epi Cell</td><td class="p-1"><input type="text" id="uEpi" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Cast Cell</td><td class="p-1"><input type="text" id="uCast" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Crystal</td><td class="p-1"><input type="text" id="uCrystal" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Ca-oxalates</td><td class="p-1"><input type="text" id="uCaOxalates" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Bacteria</td><td class="p-1"><input type="text" id="uBacteria" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Pregnancy Test</td><td class="p-1"><input type="text" id="uPregnancy" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row"><td class="p-1 border-r border-slate-200">Other</td><td class="p-1"><input type="text" id="uOther" class="res-input"></td></tr>
             </table>
           </div>
 
@@ -293,19 +309,18 @@
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
                 <th class="p-1 border-r border-slate-300">Parameters</th>
-                <th class="p-1 border-r border-slate-300 w-24">Result</th>
-                <th class="p-1">Normal Range</th>
+                <th class="p-1 w-24">Result</th>
               </tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Colour</td><td class="p-1 border-r border-slate-200"><input type="text" id="sColor" class="res-input"></td><td class="p-1 text-slate-500">Brown</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Consistency</td><td class="p-1 border-r border-slate-200"><input type="text" id="sConsistency" class="res-input"></td><td class="p-1 text-slate-500">Formed</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Mucous</td><td class="p-1 border-r border-slate-200"><input type="text" id="sMucous" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Pus Cell</td><td class="p-1 border-r border-slate-200"><input type="text" id="sPus" class="res-input"></td><td class="p-1 text-slate-500">0 - 2 /HPF</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RBC</td><td class="p-1 border-r border-slate-200"><input type="text" id="sRbc" class="res-input"></td><td class="p-1 text-slate-500">Nil</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Blood</td><td class="p-1 border-r border-slate-200"><input type="text" id="sBlood" class="res-input"></td><td class="p-1 text-slate-500">Absent</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Protozoa</td><td class="p-1 border-r border-slate-200"><input type="text" id="sProtozoa" class="res-input"></td><td class="p-1 text-slate-500">None Seen</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Helminthes</td><td class="p-1 border-r border-slate-200"><input type="text" id="sHelminthes" class="res-input"></td><td class="p-1 text-slate-500">None Seen</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Occult Blood</td><td class="p-1 border-r border-slate-200"><input type="text" id="sOccult" class="res-input"></td><td class="p-1 text-slate-500">Negative</td></tr>
-              <tr class="test-row"><td class="p-1 border-r border-slate-200">Other</td><td colspan="2" class="p-1"><input type="text" id="sOther" class="res-input"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Colour</td><td class="p-1"><input type="text" id="sColor" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Consistency</td><td class="p-1"><input type="text" id="sConsistency" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Mucous</td><td class="p-1"><input type="text" id="sMucous" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Pus Cell</td><td class="p-1"><input type="text" id="sPus" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">RBC</td><td class="p-1"><input type="text" id="sRbc" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Blood</td><td class="p-1"><input type="text" id="sBlood" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Protozoa</td><td class="p-1"><input type="text" id="sProtozoa" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Helminthes</td><td class="p-1"><input type="text" id="sHelminthes" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Occult Blood</td><td class="p-1"><input type="text" id="sOccult" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row"><td class="p-1 border-r border-slate-200">Other</td><td class="p-1"><input type="text" id="sOther" class="res-input"></td></tr>
             </table>
           </div>
 
@@ -316,16 +331,16 @@
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
                 <th class="p-1 border-r border-slate-300">Parameters</th>
                 <th class="p-1 border-r border-slate-300 w-24">Result</th>
-                <th class="p-1">Normal Range</th>
+                <th class="p-1 text-slate-900 font-bold">Normal Range</th>
               </tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Collection Time</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenCollect" class="res-input"></td><td class="p-1 text-slate-500">-</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Exam Time</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenExam" class="res-input"></td><td class="p-1 text-slate-500">Within 1 hour</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Colour</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenColor" class="res-input"></td><td class="p-1 text-slate-500">Grey-White / Opalescent</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">pH</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenPh" class="res-input"></td><td class="p-1 text-slate-500">7.2 - 8.0</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Viscosity</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenViscosity" class="res-input"></td><td class="p-1 text-slate-500">Normal (Liquefaction in 20-30 min)</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Motility</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenMotility" class="res-input"></td><td class="p-1 text-slate-500">&gt; 50% Active Forward</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Morphology</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenMorph" class="res-input"></td><td class="p-1 text-slate-500">&gt; 30% Normal Forms</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Sperm Count</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenCount" class="res-input"></td><td class="p-1 text-slate-500">15 - 200 Million / mL</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Collection Time</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenCollect" class="res-input"></td><td class="p-1 text-slate-700 font-semibold">-</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Exam Time</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenExam" class="res-input"></td><td class="p-1 text-slate-700 font-semibold">Within 1 hour</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Colour</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenColor" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">Grey-White / Opalescent</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">pH</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenPh" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">7.2 - 8.0</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Viscosity</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenViscosity" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">Normal (Liquefaction in 20-30 min)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Motility</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenMotility" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&gt; 50% Active Forward</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Morphology</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenMorph" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&gt; 30% Normal Forms</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Sperm Count</td><td class="p-1 border-r border-slate-200"><input type="text" id="semenCount" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">15 - 200 Million / mL</td></tr>
               <tr class="test-row"><td class="p-1 border-r border-slate-200">Others</td><td colspan="2" class="p-1"><input type="text" id="semenOthers" class="res-input"></td></tr>
             </table>
           </div>
@@ -336,12 +351,11 @@
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
                 <th class="p-1 border-r border-slate-300">Parameters</th>
-                <th class="p-1 border-r border-slate-300 w-24">Result</th>
-                <th class="p-1">Normal Range</th>
+                <th class="p-1 w-24">Result</th>
               </tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">1st (Spot)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sputum1" class="res-input"></td><td class="p-1 text-slate-500">Negative for AFB</td></tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">2nd (Morning)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sputum2" class="res-input"></td><td class="p-1 text-slate-500">Negative for AFB</td></tr>
-              <tr class="test-row"><td class="p-1 border-r border-slate-200">3rd (Spot)</td><td class="p-1 border-r border-slate-200"><input type="text" id="sputum3" class="res-input"></td><td class="p-1 text-slate-500">Negative for AFB</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">1st (Spot)</td><td class="p-1"><input type="text" id="sputum1" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">2nd (Morning)</td><td class="p-1"><input type="text" id="sputum2" class="res-input" oninput="checkAbnormal(this)"></td></tr>
+              <tr class="test-row"><td class="p-1 border-r border-slate-200">3rd (Spot)</td><td class="p-1"><input type="text" id="sputum3" class="res-input" oninput="checkAbnormal(this)"></td></tr>
             </table>
           </div>
 
@@ -352,9 +366,9 @@
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
                 <th class="p-1 border-r border-slate-300">Parameters</th>
                 <th class="p-1 border-r border-slate-300 w-24">Result</th>
-                <th class="p-1">Normal Range</th>
+                <th class="p-1 text-slate-900 font-bold">Normal Range</th>
               </tr>
-              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Mountoux Test</td><td class="p-1 border-r border-slate-200"><input type="text" id="mountoux" class="res-input"></td><td class="p-1 text-slate-500">&lt; 10 mm induration (Negative)</td></tr>
+              <tr class="test-row border-b border-slate-200"><td class="p-1 border-r border-slate-200">Mountoux Test</td><td class="p-1 border-r border-slate-200"><input type="text" id="mountoux" class="res-input" oninput="checkAbnormal(this)"></td><td class="p-1 text-slate-700 font-semibold">&lt; 10 mm induration (Negative)</td></tr>
               <tr class="test-row"><td class="p-1 border-r border-slate-200">Other</td><td colspan="2" class="p-1"><input type="text" id="miscOther" class="res-input"></td></tr>
             </table>
           </div>
@@ -372,7 +386,7 @@
       <!-- Signature Section Placed at Bottom -->
       <div class="mt-4 pt-2 flex justify-end">
         <div class="text-center w-48 border-t border-slate-900 pt-1">
-          <p class="font-bold text-[10px] uppercase tracking-wider text-red-700">Lab Technician</p>
+          <p class="font-bold text-[10px] uppercase tracking-wider text-slate-900">Lab Technician</p>
         </div>
       </div>
 
@@ -415,6 +429,23 @@
       document.getElementById('reportDate').value = new Date().toISOString().split('T')[0];
     }
     setTodayDate();
+
+    // Enhanced check to highlight abnormal/positive results extra boldly on screen and print
+    function checkAbnormal(inputElement) {
+      const val = inputElement.value.trim().toLowerCase();
+      // Keywords that signify abnormal or positive flags
+      if (val === 'positive' || val === 'reactive' || val === 'high' || val === 'low' || val === 'abnormal' || val.includes('+') || val === 'present') {
+        inputElement.classList.add('abnormal-highlight');
+      } else {
+        inputElement.classList.remove('abnormal-highlight');
+      }
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll('.res-input').forEach(input => {
+        input.classList.remove('abnormal-highlight');
+      });
+    }
 
     function authenticate(e) {
       e.preventDefault();
@@ -548,7 +579,7 @@
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-50 text-slate-700';
         tr.innerHTML = `
-          <td class="p-2 font-bold text-red-700">${r.pLabNo || '-'}</td>
+          <td class="p-2 font-bold text-slate-900">${r.pLabNo || '-'}</td>
           <td class="p-2">${r.reportDate || '-'}</td>
           <td class="p-2 font-bold text-slate-900">${r.pName || '-'}</td>
           <td class="p-2">${r.pAgeSex || '-'}</td>
@@ -568,7 +599,9 @@
       if (record) {
         for (let key in record) {
           if (document.getElementById(key)) {
-            document.getElementById(key).value = record[key];
+            const el = document.getElementById(key);
+            el.value = record[key];
+            checkAbnormal(el);
           }
         }
       }
