@@ -139,11 +139,11 @@
           प्रणालीमा प्रवेश गर्नुहोस् (Login)
         </button>
       
-        <div id="urlFix" class="hidden mt-2 p-2 border border-red-300 bg-red-50 rounded space-y-2">
-          <p class="text-[11px] font-bold text-red-700">Server भेटिएन। Apps Script बाट Web app URL Copy गरेर यहाँ Paste गर्नुहोस्:</p>
-          <input type="text" id="apiUrlInput" class="w-full px-2 py-2 text-[11px] border border-slate-300 rounded outline-none" placeholder="https://script.google.com/macros/s/.../exec">
-          <button type="button" onclick="saveApiUrl()" class="w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-1.5 rounded text-[11px]">Connect</button>
-          <p id="apiUrlMsg" class="text-[11px] font-semibold"></p>
+        <div id="cfgFix" class="hidden mt-2 p-2 border border-red-300 bg-red-50 rounded space-y-2">
+          <p class="text-[11px] font-bold text-red-700">Firebase config चाहिन्छ। Firebase Console बाट firebaseConfig Copy गरेर यहाँ Paste गर्नुहोस्:</p>
+          <textarea id="cfgInput" rows="5" class="w-full px-2 py-2 text-[11px] border border-slate-300 rounded outline-none" placeholder='const firebaseConfig = { apiKey: "...", authDomain: "...", projectId: "...", ... };'></textarea>
+          <button type="button" onclick="saveFbConfig()" class="w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-1.5 rounded text-[11px]">Save & Connect</button>
+          <p id="cfgMsg" class="text-[11px] font-semibold"></p>
         </div>
       </form>
     </div>
@@ -558,40 +558,25 @@
       });
     }
 
-    // ===== Google Sheets backend (Apps Script) =====
-    // ===== Change this line only if you deploy a new Apps Script URL =====
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxz0_8zEDehHzB4xHexA3hQYpV0sF3tEqM8ETd-t_B4L08qTtfny2UagM9-8OG3NJCzhw/exec';
-    const getApi = () => { try { return (localStorage.getItem('lab_api_url') || API_URL).trim(); } catch (e) { return API_URL; } };
-    function saveApiUrl() {
-      const u = $('apiUrlInput').value.trim();
-      const msg = $('apiUrlMsg');
-      if (!/^https:\/\/script\.google\.com\/macros\/s\/[^\/\s]+\/exec$/.test(u)) {
-        msg.style.color = '#b91c1c';
-        msg.textContent = 'URL सही छैन। https://script.google.com/macros/s/.../exec हुनुपर्छ।';
-        return;
-      }
-      try { localStorage.setItem('lab_api_url', u); } catch (e) {}
-      msg.style.color = '#15803d';
-      msg.textContent = 'Saved. जाँच गर्दै...';
-      checkServer();
-    }
+    // ===== Firebase backend (Firestore + Auth) =====
+    let PASSCODE = '';
+    let USERID = '';
+    let cachedList = null;
+    const $ = id => document.getElementById(id);
+    window.fbReady = new Promise(r => { window.fbResolve = r; });
 
     async function api(action, payload = {}) {
-      const res = await fetch(getApi(), {
-        method: 'POST',
-        body: JSON.stringify({ action, user: USERID, pass: PASSCODE, ...payload }) // no headers on purpose (avoids CORS preflight)
-      });
-      const text = await res.text();
-      try { return JSON.parse(text); }
-      catch (e) { const err = new Error('NON_JSON'); err.body = text.slice(0, 200); throw err; }
+      const ready = await Promise.race([window.fbReady, new Promise(r => setTimeout(() => r('timeout'), 20000))]);
+      if (ready === 'timeout') throw new Error('NOT_READY');
+      return window.fbApi(action, payload);
     }
 
     function explainError(err, r) {
       if (r && r.error === 'auth') return 'User ID वा Password गलत छ।';
-      if (r && r.error) return 'Server error: ' + r.error;
-      if (err && err.message === 'NON_JSON')
-        return 'Server ले JSON दिएन। Apps Script मा "Who has access = Anyone" राखेर Deploy गर्नुहोस्, र सही /exec URL राख्नुहोस्।';
-      return 'Server सम्म पुगेन। Internet वा URL जाँच गर्नुहोस्।';
+      if (r && r.error) return 'Error: ' + r.error;
+      if (err && err.message === 'NOCONFIG') return 'Firebase config हालिएको छैन। तलको बक्समा Paste गर्नुहोस्।';
+      if (err && err.message === 'NOT_READY') return 'Firebase लोड भएन। Internet जाँच गर्नुहोस् र पेज Refresh गर्नुहोस्।';
+      return 'Server सम्म पुगेन। Internet जाँच गर्नुहोस्।';
     }
 
     async function authenticate(e) {
@@ -601,16 +586,14 @@
       const btn = e.target.querySelector('button[type=submit]');
       btn.disabled = true; btn.textContent = 'Checking...';
       try {
-        if (USERID.toLowerCase() !== 'admin') throw Object.assign(new Error('resp'), { r: { error: 'auth' } });
-        const r = await api('list');
-        if (!r.ok) throw Object.assign(new Error('resp'), { r });
-        cachedList = r.list || [];
+        const lr = await api('login', { user: USERID, pass: PASSCODE });
+        if (!lr.ok) throw Object.assign(new Error('resp'), { r: lr });
         $('loginError').classList.add('hidden');
         $('loginModal').classList.add('hidden');
         $('appInterface').classList.remove('hidden');
+        api('list').then(r => { if (r.ok) cachedList = r.list; }).catch(() => {});
       } catch (err) {
         $('loginError').textContent = explainError(err, err.r);
-        if (!err.r || err.r.error !== 'auth') { $('apiUrlInput').value = getApi(); $('urlFix').classList.remove('hidden'); }
         $('loginError').classList.remove('hidden');
       }
       btn.disabled = false; btn.textContent = 'प्रणालीमा प्रवेश गर्नुहोस् (Login)';
@@ -623,20 +606,13 @@
       if (!labNo || !name) { alert('Patient Name र Lab No. अनिवार्य छ!'); return; }
       const data = {};
       for (const el of $('reportForm').elements) if (el.id) data[el.id] = el.value;
+      cachedList = null;
       try {
-        cachedList = null;
         const r = await api('save', { labNo, name, ageSex: $('pAgeSex').value, date: $('reportDate').value, data });
         alert(r.ok ? `Record saved: ${name} (Lab No: ${labNo})` : 'Save failed: ' + explainError(null, r));
       } catch (err) { alert('Save failed: ' + explainError(err)); }
     }
 
-    function toggleRecordsModal() {
-      const modal = $('recordsModal');
-      modal.classList.toggle('hidden');
-      if (!modal.classList.contains('hidden')) renderRecords();
-    }
-
-    let cachedList = null;
     const esc = v => String(v ?? '-').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     function drawRecords(list) {
       const tbody = $('recordsTableBody');
@@ -673,7 +649,7 @@
         cachedList = r.list || [];
         drawRecords(cachedList);
       } catch (err) {
-        if (!cachedList) tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-red-600">Records लोड भएन। इन्टरनेट जाँच गर्नुहोस्।</td></tr>';
+        if (!cachedList) tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-red-600">Records लोड भएन। Internet वा Firestore Rules जाँच गर्नुहोस्।</td></tr>';
       }
     }
 
@@ -687,7 +663,7 @@
             if (el) { el.value = r.data[k]; checkAbnormal(el); }
           }
         } else { alert('Record भेटिएन।'); return; }
-      } catch (err) { alert('Load failed: इन्टरनेट जाँच गर्नुहोस्।'); return; }
+      } catch (err) { alert('Load failed: ' + explainError(err)); return; }
       toggleRecordsModal();
     }
 
@@ -698,22 +674,88 @@
       renderRecords();
     }
 
-    async function checkServer() {
-      const el = $('connStatus');
-      try {
-        const j = await (await fetch(getApi())).json();
-        if (!j.ok) throw 0;
-        el.textContent = '● Server connected'; el.style.color = '#15803d';
-        $('urlFix').classList.add('hidden');
-        if ($('apiUrlMsg')) $('apiUrlMsg').textContent = '';
-      } catch (e) {
-        el.textContent = '● Server सम्म पुगेन'; el.style.color = '#b91c1c';
-        $('apiUrlInput').value = getApi();
-        $('urlFix').classList.remove('hidden');
+    // ---- Firebase config box (shown only until config is saved) ----
+    function saveFbConfig() {
+      const txt = $('cfgInput').value;
+      const cfg = {};
+      for (const m of txt.matchAll(/([A-Za-z]+)\s*:\s*["']([^"']+)["']/g)) cfg[m[1]] = m[2];
+      if (!cfg.apiKey || !cfg.projectId || !cfg.appId) {
+        $('cfgMsg').style.color = '#b91c1c';
+        $('cfgMsg').textContent = 'Config अधुरो छ। apiKey, projectId र appId सहित पूरै Copy गर्नुहोस्।';
+        return;
       }
+      try { localStorage.setItem('lab_fb_config', JSON.stringify(cfg)); } catch (e) {}
+      $('cfgMsg').style.color = '#15803d';
+      $('cfgMsg').textContent = 'Saved. Reload गर्दै...';
+      setTimeout(() => location.reload(), 600);
     }
-    checkServer();
   </script>
 
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, getDocs, deleteDoc, collection, query, orderBy, limit, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Optional: paste your firebaseConfig here to skip the login-screen box.
+    const EMBEDDED_CONFIG = {
+      apiKey: "AIzaSyBzhnBYjOqq1DkQw5ioN2kFe9fMTVeSR0c",
+      authDomain: "lab-reports-ba280.firebaseapp.com",
+      projectId: "lab-reports-ba280",
+      storageBucket: "lab-reports-ba280.firebasestorage.app",
+      messagingSenderId: "831062386731",
+      appId: "1:831062386731:web:eea96464eb00473c9c226e"
+    };
+
+    const stored = (() => { try { return JSON.parse(localStorage.getItem('lab_fb_config') || 'null'); } catch (e) { return null; } })();
+    const cfg = stored || EMBEDDED_CONFIG;
+    const status = document.getElementById('connStatus');
+    const EMAIL = 'admin@lab.local';
+    const docKey = labNo => String(labNo).replace(/[\/\s]+/g, '_');
+
+    if (!cfg) {
+      status.textContent = '● Firebase config हालिएको छैन'; status.style.color = '#b91c1c';
+      document.getElementById('cfgFix').classList.remove('hidden');
+      window.fbApi = async () => { throw new Error('NOCONFIG'); };
+    } else {
+      const app = initializeApp(cfg);
+      const auth = getAuth(app), db = getFirestore(app);
+      status.textContent = '● Firebase तयार छ'; status.style.color = '#15803d';
+      const bad = e => {
+        const c = e && e.code || '';
+        if (/invalid-credential|wrong-password|user-not-found|invalid-email/.test(c)) return { ok: false, error: 'auth' };
+        if (/permission-denied/.test(c)) return { ok: false, error: 'Permission denied - Firestore Rules जाँच गर्नुहोस्' };
+        if (/api-key|invalid-app|configuration/.test(c)) {
+          document.getElementById('cfgFix').classList.remove('hidden');
+          return { ok: false, error: 'Firebase config चलेन। तलको बक्समा Firebase बाट Copy गरेको config Paste गर्नुहोस्।' };
+        }
+        if (/network/.test(c)) throw e;
+        return { ok: false, error: (e && e.message) || String(e) };
+      };
+      window.fbApi = async (action, p = {}) => {
+        try {
+          if (action === 'login') { const id = String(p.user || '').trim().toLowerCase();
+            const email = id.includes('@') ? id : (id || 'admin') + '@lab.local';
+            await signInWithEmailAndPassword(auth, email, p.pass); return { ok: true }; }
+          if (action === 'list') {
+            const snap = await getDocs(query(collection(db, 'lab_records'), orderBy('updatedAt', 'desc'), limit(300)));
+            return { ok: true, list: snap.docs.map(d => { const r = d.data(); return { labNo: r.labNo, date: r.date, name: r.name, ageSex: r.ageSex }; }) };
+          }
+          if (action === 'save') {
+            await setDoc(doc(db, 'lab_records', docKey(p.labNo)), { labNo: p.labNo, name: p.name, ageSex: p.ageSex || '', date: p.date || '', data: p.data, updatedAt: serverTimestamp() });
+            return { ok: true };
+          }
+          if (action === 'get') {
+            const s = await getDoc(doc(db, 'lab_records', docKey(p.labNo)));
+            return s.exists() ? { ok: true, data: s.data().data } : { ok: false, error: 'not found' };
+          }
+          if (action === 'delete') { await deleteDoc(doc(db, 'lab_records', docKey(p.labNo))); return { ok: true }; }
+          return { ok: false, error: 'unknown action' };
+        } catch (e) { return bad(e); }
+      };
+    }
+    window.fbResolve();
+  </script>
 </body>
 </html>
