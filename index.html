@@ -138,6 +138,13 @@
         <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded text-xs transition">
           प्रणालीमा प्रवेश गर्नुहोस् (Login)
         </button>
+      
+        <div id="urlFix" class="hidden mt-2 p-2 border border-red-300 bg-red-50 rounded space-y-2">
+          <p class="text-[11px] font-bold text-red-700">Server भेटिएन। Apps Script बाट Web app URL Copy गरेर यहाँ Paste गर्नुहोस्:</p>
+          <input type="text" id="apiUrlInput" class="w-full px-2 py-2 text-[11px] border border-slate-300 rounded outline-none" placeholder="https://script.google.com/macros/s/.../exec">
+          <button type="button" onclick="saveApiUrl()" class="w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-1.5 rounded text-[11px]">Connect</button>
+          <p id="apiUrlMsg" class="text-[11px] font-semibold"></p>
+        </div>
       </form>
     </div>
   </div>
@@ -554,7 +561,20 @@
     // ===== Google Sheets backend (Apps Script) =====
     // ===== Change this line only if you deploy a new Apps Script URL =====
     const API_URL = 'https://script.google.com/macros/s/AKfycbxz0_8zEDehHzB4xHexA3hQYpV0sF3tEqM8ETd-t_B4L08qTtfny2UagM9-8OG3NJCzhw/exec';
-    const getApi = () => API_URL;
+    const getApi = () => { try { return (localStorage.getItem('lab_api_url') || API_URL).trim(); } catch (e) { return API_URL; } };
+    function saveApiUrl() {
+      const u = $('apiUrlInput').value.trim();
+      const msg = $('apiUrlMsg');
+      if (!/^https:\/\/script\.google\.com\/macros\/s\/[^\/\s]+\/exec$/.test(u)) {
+        msg.style.color = '#b91c1c';
+        msg.textContent = 'URL सही छैन। https://script.google.com/macros/s/.../exec हुनुपर्छ।';
+        return;
+      }
+      try { localStorage.setItem('lab_api_url', u); } catch (e) {}
+      msg.style.color = '#15803d';
+      msg.textContent = 'Saved. जाँच गर्दै...';
+      checkServer();
+    }
 
     async function api(action, payload = {}) {
       const res = await fetch(getApi(), {
@@ -590,6 +610,7 @@
         $('appInterface').classList.remove('hidden');
       } catch (err) {
         $('loginError').textContent = explainError(err, err.r);
+        if (!err.r || err.r.error !== 'auth') { $('apiUrlInput').value = getApi(); $('urlFix').classList.remove('hidden'); }
         $('loginError').classList.remove('hidden');
       }
       btn.disabled = false; btn.textContent = 'प्रणालीमा प्रवेश गर्नुहोस् (Login)';
@@ -683,9 +704,12 @@
         const j = await (await fetch(getApi())).json();
         if (!j.ok) throw 0;
         el.textContent = '● Server connected'; el.style.color = '#15803d';
+        $('urlFix').classList.add('hidden');
+        if ($('apiUrlMsg')) $('apiUrlMsg').textContent = '';
       } catch (e) {
-        el.textContent = '● Server सम्म पुगेन — Internet वा URL जाँच गर्नुहोस्';
-        el.style.color = '#b91c1c';
+        el.textContent = '● Server सम्म पुगेन'; el.style.color = '#b91c1c';
+        $('apiUrlInput').value = getApi();
+        $('urlFix').classList.remove('hidden');
       }
     }
     checkServer();
