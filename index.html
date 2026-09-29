@@ -124,26 +124,20 @@
         <p id="connStatus" class="text-[11px] font-bold mt-1 text-slate-500">● Server जाँच गर्दै...</p>
       </div>
       <div id="loginError" class="hidden mb-3 p-2 bg-red-50 border border-red-300 text-red-700 text-xs rounded text-center font-bold">
-        Passcode मिलेन!
+        User ID वा Password मिलेन!
       </div>
       <form onsubmit="authenticate(event)" class="space-y-3">
         <div>
-          <label class="block text-[11px] font-bold text-slate-600 mb-1">PASSCODE</label>
-          <input type="password" id="passInput" class="w-full px-3 py-2 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-red-700 outline-none" placeholder="Enter passcode" required>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">USER ID</label>
+          <input type="text" id="userInput" autocomplete="username" class="w-full px-3 py-2 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-red-700 outline-none" placeholder="User ID" required>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">PASSWORD</label>
+          <input type="password" id="passInput" class="w-full px-3 py-2 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-red-700 outline-none" placeholder="Password" required>
         </div>
         <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded text-xs transition">
           प्रणालीमा प्रवेश गर्नुहोस् (Login)
         </button>
-      
-        <div class="pt-2 mt-1 border-t border-slate-200">
-          <button type="button" onclick="document.getElementById('serverSettings').classList.toggle('hidden')" class="text-[11px] text-slate-500 underline">⚙ Server settings</button>
-          <div id="serverSettings" class="hidden mt-2 space-y-2">
-            <label class="block text-[11px] font-bold text-slate-600">WEB APP URL (must end with /exec)</label>
-            <input type="text" id="apiUrlInput" class="w-full px-3 py-2 text-[11px] border border-slate-300 rounded outline-none" placeholder="https://script.google.com/macros/s/.../exec">
-            <button type="button" onclick="saveApiUrl()" class="w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-1.5 rounded text-[11px]">Save URL</button>
-            <p id="apiUrlMsg" class="text-[11px] text-green-700 font-semibold"></p>
-          </div>
-        </div>
       </form>
     </div>
   </div>
@@ -558,27 +552,14 @@
     }
 
     // ===== Google Sheets backend (Apps Script) =====
-    const DEFAULT_API = 'https://script.google.com/macros/s/AKfycbxz0_8zEDehHzB4xHexA3hQYpV0sF3tEqM8ETd-t_B4L08qTtfny2UagM9-8OG3NJCzhw/exec';
-    const getApi = () => { try { return (localStorage.getItem('lab_api_url') || DEFAULT_API).trim(); } catch (e) { return DEFAULT_API; } };
-    function saveApiUrl() {
-      const u = $('apiUrlInput').value.trim();
-      if (!/^https:\/\/script\.google\.com\/macros\/s\/[^\/\s]+\/exec$/.test(u)) {
-        $('apiUrlMsg').className = 'text-[11px] text-red-700 font-semibold';
-        $('apiUrlMsg').textContent = 'URL सही छैन। https://script.google.com/macros/s/.../exec हुनुपर्छ।';
-        return;
-      }
-      try { localStorage.setItem('lab_api_url', u); } catch (e) {}
-      $('apiUrlMsg').className = 'text-[11px] text-green-700 font-semibold';
-      $('apiUrlMsg').textContent = 'URL saved. अब Passcode हालेर Login गर्नुहोस्।';
-      checkServer();
-    }
-    let PASSCODE = '';
-    const $ = id => document.getElementById(id);
+    // ===== Change this line only if you deploy a new Apps Script URL =====
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxz0_8zEDehHzB4xHexA3hQYpV0sF3tEqM8ETd-t_B4L08qTtfny2UagM9-8OG3NJCzhw/exec';
+    const getApi = () => API_URL;
 
     async function api(action, payload = {}) {
       const res = await fetch(getApi(), {
         method: 'POST',
-        body: JSON.stringify({ action, pass: PASSCODE, ...payload }) // no headers on purpose (avoids CORS preflight)
+        body: JSON.stringify({ action, user: USERID, pass: PASSCODE, ...payload }) // no headers on purpose (avoids CORS preflight)
       });
       const text = await res.text();
       try { return JSON.parse(text); }
@@ -586,19 +567,21 @@
     }
 
     function explainError(err, r) {
-      if (r && r.error === 'auth') return 'Passcode गलत छ। (Apps Script को PASS सँग मिलाउनुहोस्)';
+      if (r && r.error === 'auth') return 'User ID वा Password गलत छ।';
       if (r && r.error) return 'Server error: ' + r.error;
       if (err && err.message === 'NON_JSON')
-        return 'Server ले JSON दिएन। Apps Script मा "Who has access = Anyone" राखेर Deploy गर्नुहोस्, र नयाँ /exec URL ⚙ Server settings मा हाल्नुहोस्।';
-      return 'Server सम्म पुगेन। Internet जाँच गर्नुहोस् वा ⚙ Server settings मा सही URL हाल्नुहोस्।';
+        return 'Server ले JSON दिएन। Apps Script मा "Who has access = Anyone" राखेर Deploy गर्नुहोस्, र सही /exec URL राख्नुहोस्।';
+      return 'Server सम्म पुगेन। Internet वा URL जाँच गर्नुहोस्।';
     }
 
     async function authenticate(e) {
       e.preventDefault();
+      USERID = $('userInput').value.trim();
       PASSCODE = $('passInput').value;
       const btn = e.target.querySelector('button[type=submit]');
       btn.disabled = true; btn.textContent = 'Checking...';
       try {
+        if (USERID.toLowerCase() !== 'admin') throw Object.assign(new Error('resp'), { r: { error: 'auth' } });
         const r = await api('list');
         if (!r.ok) throw Object.assign(new Error('resp'), { r });
         cachedList = r.list || [];
@@ -612,7 +595,7 @@
       btn.disabled = false; btn.textContent = 'प्रणालीमा प्रवेश गर्नुहोस् (Login)';
     }
 
-    function exitApp() { PASSCODE = ''; location.reload(); }
+    function exitApp() { PASSCODE = ''; USERID = ''; location.reload(); }
 
     async function saveRecord() {
       const labNo = $('pLabNo').value.trim(), name = $('pName').value.trim();
@@ -696,15 +679,13 @@
 
     async function checkServer() {
       const el = $('connStatus');
-      $('apiUrlInput').value = getApi();
       try {
         const j = await (await fetch(getApi())).json();
         if (!j.ok) throw 0;
         el.textContent = '● Server connected'; el.style.color = '#15803d';
       } catch (e) {
-        el.textContent = '● Server सम्म पुगेन — तल ⚙ Server settings मा सही URL हाल्नुहोस्';
+        el.textContent = '● Server सम्म पुगेन — Internet वा URL जाँच गर्नुहोस्';
         el.style.color = '#b91c1c';
-        $('serverSettings').classList.remove('hidden');
       }
     }
     checkServer();
