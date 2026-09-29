@@ -35,7 +35,7 @@
       outline: none;
       background-color: #ffffff;
       border-color: #b91c1c;
-      box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.15);
+      box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.18);
     }
 
     /* Extra Bold Highlight Style specifically designed for Abnormal/Positive results during Print & Screen */
@@ -91,33 +91,58 @@
         display: none !important;
       }
     }
+
+    body { background:#e9edf2; font-size:12px; }
+    .card { box-shadow:0 1px 3px rgba(15,23,42,.15); border-color:#64748b; }
+    .print-area { font-size:11px !important; line-height:1.35 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .print-area .test-block { border:1.5px solid #b91c1c !important; }
+    .test-block > div:first-child { text-align:left !important; padding:4px 10px !important; font-size:11px !important; letter-spacing:.08em; background:#b91c1c !important; }
+    .test-block table { border-collapse:collapse; }
+    .test-block th, .test-block td { border:1px solid #94a3b8 !important; padding:3px 8px !important; }
+    .test-block .header-row th { background:#fee2e2 !important; color:#7f1d1d !important; font-size:10px !important; text-transform:uppercase; }
+    .test-block .sub-header-row td { background:#fef2f2 !important; color:#7f1d1d !important; }
+    .test-block tr.test-row:nth-child(even) td { background:#f8fafc; }
+    .res-input { font-size:12px; padding:2px 6px; }
+    .letterhead { border-bottom:3px double #b91c1c; padding-bottom:8px; margin-bottom:8px; }
+    .sig-line { border-top:1px solid #0f172a; padding-top:3px; text-align:center; width:170px; font-weight:700; font-size:10px; text-transform:uppercase; }
+    @media print {
+      .print-area { padding:8mm !important; }
+      .test-block { break-inside:avoid; }
+      .print-note { display:block !important; }
+    }
   </style>
 </head>
 <body class="text-slate-900 min-h-screen p-2 md:p-6 flex flex-col items-center">
 
   <!-- AUTHENTICATION MODAL -->
   <div id="loginModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-    <div class="card rounded-xl p-6 w-full max-w-md bg-white">
+    <div class="card rounded-sm p-6 w-full max-w-md bg-white">
       <div class="text-center mb-4">
         <h3 class="text-xs font-bold text-red-700 uppercase tracking-widest">Government of Gandaki Province</h3>
         <h2 class="text-xl font-black text-red-700">Dhaulagiri Ayurveda Hospital, Baglung</h2>
         <p class="text-xs text-slate-500 font-semibold mt-1">Laboratory Management System | Phone: 068-520031</p>
       </div>
-      <div id="loginError" class="hidden mb-3 p-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded text-center font-bold">
-        User ID वा Password मिलेन! (ID: admin | Pass: admin123)
+      <div id="loginError" class="hidden mb-3 p-2 bg-red-50 border border-red-300 text-red-700 text-xs rounded text-center font-bold">
+        Passcode मिलेन!
       </div>
       <form onsubmit="authenticate(event)" class="space-y-3">
         <div>
-          <label class="block text-[11px] font-bold text-slate-600 mb-1">USER ID</label>
-          <input type="text" id="userInput" class="w-full px-3 py-2 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-red-700 outline-none" placeholder="admin" required>
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-slate-600 mb-1">PASSWORD</label>
-          <input type="password" id="passInput" class="w-full px-3 py-2 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-red-700 outline-none" placeholder="admin123" required>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">PASSCODE</label>
+          <input type="password" id="passInput" class="w-full px-3 py-2 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-red-700 outline-none" placeholder="Enter passcode" required>
         </div>
         <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded text-xs transition">
           प्रणालीमा प्रवेश गर्नुहोस् (Login)
         </button>
+      
+        <div class="pt-2 mt-1 border-t border-slate-200">
+          <button type="button" onclick="document.getElementById('serverSettings').classList.toggle('hidden')" class="text-[11px] text-slate-500 underline">⚙ Server settings</button>
+          <div id="serverSettings" class="hidden mt-2 space-y-2">
+            <label class="block text-[11px] font-bold text-slate-600">WEB APP URL (must end with /exec)</label>
+            <input type="text" id="apiUrlInput" class="w-full px-3 py-2 text-[11px] border border-slate-300 rounded outline-none" placeholder="https://script.google.com/macros/s/.../exec">
+            <button type="button" onclick="saveApiUrl()" class="w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-1.5 rounded text-[11px]">Save URL</button>
+            <p id="apiUrlMsg" class="text-[11px] text-green-700 font-semibold"></p>
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -126,13 +151,13 @@
   <div id="appInterface" class="hidden w-full max-w-4xl">
     
     <!-- Top Action Bar -->
-    <div class="mb-3 no-print card p-3 rounded-xl flex flex-wrap justify-between items-center gap-2">
+    <div class="mb-3 no-print card p-3 rounded-sm flex flex-wrap justify-between items-center gap-2">
       <div class="flex items-center space-x-2">
         <h1 class="text-xs font-black text-slate-900 uppercase">Sequential Lab Suite</h1>
       </div>
       <div class="flex items-center space-x-2">
-        <button onclick="analyzeWithAI()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3 py-1.5 rounded text-xs transition">✨ AI Analyze</button>
-        <button onclick="saveRecord()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded text-xs transition">💾 Save Record</button>
+        <button onclick="analyzeWithAI()" class="bg-slate-600 hover:bg-slate-700 text-white font-bold px-3 py-1.5 rounded text-xs transition">✨ AI Analyze</button>
+        <button onclick="saveRecord()" class="bg-green-700 hover:bg-green-800 text-white font-bold px-3 py-1.5 rounded text-xs transition">💾 Save Record</button>
         <button onclick="toggleRecordsModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-3 py-1.5 rounded text-xs transition">📁 View Records</button>
         <button onclick="printReport()" class="bg-red-700 hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded text-xs transition">🖨️ Print Report</button>
         <button onclick="document.getElementById('reportForm').reset(); setTodayDate(); clearHighlights();" class="bg-slate-100 border border-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded text-xs transition">Clear</button>
@@ -141,32 +166,29 @@
     </div>
 
     <!-- Printable Sheet: Single Column Sequential Flow Without Gaps -->
-    <div class="print-area card p-5 rounded-2xl text-[10px] leading-tight text-slate-900 bg-white w-full">
+    <div class="print-area card p-5 rounded-sm text-[10px] leading-tight text-slate-900 bg-white w-full">
       
       <form id="reportForm">
         
         <!-- Header Section -->
-        <div class="border-b-2 border-red-700 pb-2 mb-2">
-          <div class="flex justify-between items-center">
-            <div class="w-12 h-12 flex-shrink-0">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg" alt="Emblem of Nepal" class="w-full h-full object-contain">
+        <div class="letterhead">
+          <div class="flex items-center justify-between">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Emblem_of_Nepal.svg" alt="Emblem of Nepal" class="w-16 h-16 object-contain flex-shrink-0">
+            <div class="text-center flex-grow px-3">
+              <p class="text-[11px] font-bold text-slate-700 uppercase tracking-widest">Government of Gandaki Province</p>
+              <h1 class="text-lg font-black text-red-700 uppercase tracking-wide leading-tight">Dhaulagiri Ayurveda Hospital</h1>
+              <p class="text-[11px] font-semibold text-slate-700">Baglung, Nepal &nbsp;|&nbsp; Phone: 068-520031</p>
             </div>
-            <div class="text-center flex-grow px-2">
-              <h3 class="text-[10px] font-bold text-red-700 uppercase tracking-widest">Government of Gandaki Province</h3>
-              <h1 class="text-sm font-black text-red-700 tracking-wide uppercase">Dhaulagiri Ayurveda Hospital, Baglung</h1>
-              <h2 class="text-[11px] font-extrabold text-slate-900 uppercase tracking-wider mt-0.5">Laboratory Report</h2>
-            </div>
-            <div class="text-right text-[10px] font-bold text-red-700 border border-red-200 p-1.5 rounded bg-red-50/50">
-              <p>Ph: 068-520031</p>
-            </div>
+            <div class="w-16 flex-shrink-0"></div>
           </div>
+          <div class="mt-2 bg-red-700 text-white text-center font-extrabold uppercase tracking-[0.25em] py-1 text-xs">Laboratory Report</div>
         </div>
 
         <!-- Patient Demographics Bar -->
-        <div class="border border-slate-400 bg-slate-50/50 rounded-lg p-2 mb-2 grid grid-cols-3 gap-x-3 gap-y-1 text-[10px]">
+        <div class="border border-slate-400 bg-slate-50/50 rounded-sm p-2 mb-2 grid grid-cols-3 gap-x-3 gap-y-1 text-[10px]">
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Patient:</span><input type="text" id="pName" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-bold text-slate-900" required></div>
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Age/Sex:</span><input type="text" id="pAgeSex" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold"></div>
-          <div class="flex items-center"><span class="font-bold w-16 text-red-700">Lab No.:</span><input type="text" id="pLabNo" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-bold text-red-600" required></div>
+          <div class="flex items-center"><span class="font-bold w-16 text-red-700">Lab No.:</span><input type="text" id="pLabNo" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-bold text-red-700" required></div>
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Address:</span><input type="text" id="pAddress" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1"></div>
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Ref. By:</span><input type="text" id="pRefBy" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1"></div>
           <div class="flex items-center"><span class="font-bold w-16 text-red-700">Date:</span><input type="text" id="reportDate" class="border-b border-slate-400 focus:outline-none flex-grow bg-transparent px-1 font-semibold"></div>
@@ -176,7 +198,7 @@
         <div id="sequentialContainer" class="flex flex-col space-y-2 w-full">
           
           <!-- HAEMATOLOGICAL TEST -->
-          <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
+          <div class="test-block border border-slate-400 rounded-sm overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Haematological Test</div>
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
@@ -212,7 +234,7 @@
           </div>
 
           <!-- BIOCHEMICAL TEST -->
-          <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
+          <div class="test-block border border-slate-400 rounded-sm overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Biochemical Test</div>
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
@@ -248,7 +270,7 @@
           </div>
 
           <!-- SEROLOGY / IMMUNOLOGY -->
-          <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
+          <div class="test-block border border-slate-400 rounded-sm overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Serology</div>
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
@@ -277,7 +299,7 @@
           </div>
 
           <!-- URINE ANALYSIS -->
-          <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
+          <div class="test-block border border-slate-400 rounded-sm overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Urine Analysis</div>
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
@@ -305,7 +327,7 @@
           </div>
 
           <!-- STOOL ANALYSIS -->
-          <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
+          <div class="test-block border border-slate-400 rounded-sm overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Stool Analysis</div>
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
@@ -326,7 +348,7 @@
           </div>
 
           <!-- SEMEN ANALYSIS -->
-          <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
+          <div class="test-block border border-slate-400 rounded-sm overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Semen Analysis</div>
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
@@ -347,7 +369,7 @@
           </div>
 
           <!-- SPUTUM ANALYSIS -->
-          <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
+          <div class="test-block border border-slate-400 rounded-sm overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Sputum Analysis</div>
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
@@ -361,7 +383,7 @@
           </div>
 
           <!-- MISCELLANEOUS -->
-          <div class="test-block border border-slate-400 rounded-lg overflow-hidden w-full">
+          <div class="test-block border border-slate-400 rounded-sm overflow-hidden w-full">
             <div class="bg-red-700 text-white font-black px-2.5 py-1 text-center text-[10px] uppercase tracking-wider">Miscellaneous</div>
             <table class="w-full text-left border-collapse">
               <tr class="header-row bg-slate-100 text-[9px] border-b border-slate-300 font-bold text-red-700">
@@ -377,30 +399,30 @@
         </div>
 
         <!-- AI Summary Note Box -->
-        <div id="aiSummaryBox" class="hidden mt-2 p-2 bg-red-50 border border-red-200 rounded-lg text-xs">
-          <div class="font-bold text-red-900 mb-0.5">✨ AI Clinical Findings Summary:</div>
+        <div id="aiSummaryBox" class="hidden mt-2 p-2 bg-red-50 border border-red-200 rounded-sm text-xs">
+          <div class="font-bold text-red-800 mb-0.5">✨ AI Clinical Findings Summary:</div>
           <p id="aiSummaryText" class="text-slate-800 italic"></p>
         </div>
 
       </form>
 
       <!-- Signature Section Placed at Bottom -->
-      <div class="mt-4 pt-2 flex justify-end">
-        <div class="text-center w-48 border-t border-slate-900 pt-1">
-          <p class="font-bold text-[10px] uppercase tracking-wider text-slate-900">Lab Technician</p>
+      <div class="mt-8 pt-2 flex justify-end items-end">
+        <div class="text-center" style="width:200px">
+          <div class="sig-line" style="width:100%">Lab Technician</div>
         </div>
       </div>
-
+      <p class="print-note hidden mt-3 text-[9px] text-slate-600 text-center">Results relate only to the sample tested. Abnormal values are shown in bold. Please correlate clinically.</p>
     </div>
 
   </div>
 
   <!-- SAVED RECORDS MODAL -->
   <div id="recordsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 hidden no-print">
-    <div class="card rounded-xl p-5 w-full max-w-4xl max-h-[85vh] flex flex-col bg-white">
+    <div class="card rounded-sm p-5 w-full max-w-4xl max-h-[85vh] flex flex-col bg-white">
       <div class="flex justify-between items-center pb-3 border-b border-slate-200">
         <h3 class="text-base font-bold text-slate-900">Saved Laboratory Records</h3>
-        <button onclick="toggleRecordsModal()" class="text-slate-400 hover:text-red-600 font-bold text-xl transition">&times;</button>
+        <button onclick="toggleRecordsModal()" class="text-slate-400 hover:text-red-700 font-bold text-xl transition">&times;</button>
       </div>
       
       <div class="py-2">
@@ -447,23 +469,6 @@
       });
     }
 
-    function authenticate(e) {
-      e.preventDefault();
-      if (document.getElementById('userInput').value === 'admin' && document.getElementById('passInput').value === 'admin123') {
-        document.getElementById('loginModal').classList.add('hidden');
-        document.getElementById('appInterface').classList.remove('hidden');
-      } else {
-        document.getElementById('loginError').classList.remove('hidden');
-      }
-    }
-
-    function exitApp() {
-      document.getElementById('appInterface').classList.add('hidden');
-      document.getElementById('loginModal').classList.remove('hidden');
-      document.getElementById('userInput').value = '';
-      document.getElementById('passInput').value = '';
-    }
-
     // Dynamic Sequential Print Logic (Hides empty blocks and stacks remaining serially without gaps)
     function printReport() {
       const blocks = document.querySelectorAll('.test-block');
@@ -483,6 +488,14 @@
           }
         });
 
+        // Hide sub-headers (e.g. DIFFERENTIAL COUNT, Widal Test) unless a row under them has a value
+        let subRow = null, subHas = false;
+        const flush = () => { if (subRow) subRow.style.display = subHas ? '' : 'none'; };
+        block.querySelectorAll('tr.sub-header-row, tr.test-row').forEach(r => {
+          if (r.classList.contains('sub-header-row')) { flush(); subRow = r; subHas = false; }
+          else if (subRow && r.style.display !== 'none') { subHas = true; }
+        });
+        flush();
         // Completely hide the block if empty so it leaves no gap
         if (!hasValue) {
           block.style.display = 'none';
@@ -499,7 +512,7 @@
         blocks.forEach(block => {
           block.style.display = 'block';
         });
-        document.querySelectorAll('tr.test-row').forEach(r => r.style.display = '');
+        document.querySelectorAll('tr.test-row, tr.sub-header-row').forEach(r => r.style.display = '');
       }, 500);
     }
 
@@ -526,93 +539,10 @@
       }
     }
 
-    function saveRecord() {
-      const labNo = document.getElementById('pLabNo').value.trim();
-      const name = document.getElementById('pName').value.trim();
-      
-      if (!labNo || !name) {
-        alert('Patient Name र Lab No. अनिवार्य छ!');
-        return;
-      }
-
-      const formElements = document.getElementById('reportForm').elements;
-      const recordData = {};
-
-      for (let el of formElements) {
-        if (el.id) {
-          recordData[el.id] = el.value;
-        }
-      }
-
-      let records = JSON.parse(localStorage.getItem('lab_records_v2') || '[]');
-      const existingIndex = records.findIndex(r => r.pLabNo === labNo);
-
-      if (existingIndex > -1) {
-        records[existingIndex] = recordData;
-      } else {
-        records.push(recordData);
-      }
-
-      localStorage.setItem('lab_records_v2', JSON.stringify(records));
-      alert(`Record saved successfully for ${name} (Lab No: ${labNo})`);
-    }
-
     function toggleRecordsModal() {
       const modal = document.getElementById('recordsModal');
       modal.classList.toggle('hidden');
       if (!modal.classList.contains('hidden')) {
-        renderRecords();
-      }
-    }
-
-    function renderRecords() {
-      const records = JSON.parse(localStorage.getItem('lab_records_v2') || '[]');
-      const tbody = document.getElementById('recordsTableBody');
-      tbody.innerHTML = '';
-
-      if (records.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-400">कुनै पनि रेकर्ड भेटिएन।</td></tr>';
-        return;
-      }
-
-      records.forEach(r => {
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-50 text-slate-700';
-        tr.innerHTML = `
-          <td class="p-2 font-bold text-red-600">${r.pLabNo || '-'}</td>
-          <td class="p-2">${r.reportDate || '-'}</td>
-          <td class="p-2 font-bold text-slate-900">${r.pName || '-'}</td>
-          <td class="p-2">${r.pAgeSex || '-'}</td>
-          <td class="p-2 text-center space-x-1">
-            <button onclick="loadRecord('${r.pLabNo}')" class="bg-blue-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">Load</button>
-            <button onclick="deleteRecord('${r.pLabNo}')" class="bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">Delete</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function loadRecord(labNo) {
-      const records = JSON.parse(localStorage.getItem('lab_records_v2') || '[]');
-      const record = records.find(r => r.pLabNo === labNo);
-      
-      if (record) {
-        for (let key in record) {
-          if (document.getElementById(key)) {
-            const el = document.getElementById(key);
-            el.value = record[key];
-            checkAbnormal(el);
-          }
-        }
-      }
-      toggleRecordsModal();
-    }
-
-    function deleteRecord(labNo) {
-      if (confirm(`के Lab No: ${labNo} हटाउन चाहनुहुन्छ?`)) {
-        let records = JSON.parse(localStorage.getItem('lab_records_v2') || '[]');
-        records = records.filter(r => r.pLabNo !== labNo);
-        localStorage.setItem('lab_records_v2', JSON.stringify(records));
         renderRecords();
       }
     }
@@ -624,6 +554,132 @@
         const text = row.innerText.toLowerCase();
         row.style.display = text.includes(query) ? '' : 'none';
       });
+    }
+
+    // ===== Google Sheets backend (Apps Script) =====
+    const DEFAULT_API = 'https://script.google.com/macros/s/AKfycbzfWWuykdPkvqNoHTGmOnmUjVaPF0vhufUZtpxlpo_8ZIdmU5cNvcHtrPIE0t1uDkRyCg/exec';
+    const getApi = () => { try { return (localStorage.getItem('lab_api_url') || DEFAULT_API).trim(); } catch (e) { return DEFAULT_API; } };
+    function saveApiUrl() {
+      const u = $('apiUrlInput').value.trim();
+      if (!/^https:\/\/script\.google\.com\/macros\/s\/[^\/\s]+\/exec$/.test(u)) {
+        $('apiUrlMsg').className = 'text-[11px] text-red-700 font-semibold';
+        $('apiUrlMsg').textContent = 'URL सही छैन। https://script.google.com/macros/s/.../exec हुनुपर्छ।';
+        return;
+      }
+      try { localStorage.setItem('lab_api_url', u); } catch (e) {}
+      $('apiUrlMsg').className = 'text-[11px] text-green-700 font-semibold';
+      $('apiUrlMsg').textContent = 'URL saved. अब Passcode हालेर Login गर्नुहोस्।';
+    }
+    let PASSCODE = '';
+    const $ = id => document.getElementById(id);
+
+    async function api(action, payload = {}) {
+      const res = await fetch(getApi(), {
+        method: 'POST',
+        body: JSON.stringify({ action, pass: PASSCODE, ...payload }) // no headers on purpose (avoids CORS preflight)
+      });
+      const text = await res.text();
+      try { return JSON.parse(text); }
+      catch (e) { const err = new Error('NON_JSON'); err.body = text.slice(0, 200); throw err; }
+    }
+
+    function explainError(err, r) {
+      if (r && r.error === 'auth') return 'Passcode गलत छ। (Apps Script को PASS सँग मिलाउनुहोस्)';
+      if (r && r.error) return 'Server error: ' + r.error;
+      if (err && err.message === 'NON_JSON')
+        return 'Server ले JSON दिएन। Apps Script मा "Who has access = Anyone" राखेर Deploy गर्नुहोस्, र नयाँ /exec URL ⚙ Server settings मा हाल्नुहोस्।';
+      return 'Server सम्म पुगेन। Internet जाँच गर्नुहोस् वा ⚙ Server settings मा सही URL हाल्नुहोस्।';
+    }
+
+    async function authenticate(e) {
+      e.preventDefault();
+      PASSCODE = $('passInput').value;
+      const btn = e.target.querySelector('button[type=submit]');
+      btn.disabled = true; btn.textContent = 'Checking...';
+      try {
+        const r = await api('ping');
+        if (!r.ok) throw Object.assign(new Error('resp'), { r });
+        $('loginError').classList.add('hidden');
+        $('loginModal').classList.add('hidden');
+        $('appInterface').classList.remove('hidden');
+      } catch (err) {
+        $('loginError').textContent = explainError(err, err.r);
+        $('loginError').classList.remove('hidden');
+      }
+      btn.disabled = false; btn.textContent = 'प्रणालीमा प्रवेश गर्नुहोस् (Login)';
+    }
+
+    function exitApp() { PASSCODE = ''; location.reload(); }
+
+    async function saveRecord() {
+      const labNo = $('pLabNo').value.trim(), name = $('pName').value.trim();
+      if (!labNo || !name) { alert('Patient Name र Lab No. अनिवार्य छ!'); return; }
+      const data = {};
+      for (const el of $('reportForm').elements) if (el.id) data[el.id] = el.value;
+      try {
+        const r = await api('save', { labNo, name, ageSex: $('pAgeSex').value, date: $('reportDate').value, data });
+        alert(r.ok ? `Record saved: ${name} (Lab No: ${labNo})` : 'Save failed: ' + explainError(null, r));
+      } catch (err) { alert('Save failed: ' + explainError(err)); }
+    }
+
+    function toggleRecordsModal() {
+      const modal = $('recordsModal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) renderRecords();
+    }
+
+    async function renderRecords() {
+      const tbody = $('recordsTableBody');
+      tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-400">Loading...</td></tr>';
+      try {
+        const r = await api('list');
+        const list = r.list || [];
+        if (!list.length) {
+          tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-400">कुनै पनि रेकर्ड भेटिएन।</td></tr>';
+          return;
+        }
+        tbody.innerHTML = '';
+        const esc = v => String(v ?? '-').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        list.forEach(x => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50 text-slate-700';
+          tr.innerHTML = `
+            <td class="p-2 font-bold text-red-700">${esc(x.labNo)}</td>
+            <td class="p-2">${esc(String(x.date).slice(0, 10))}</td>
+            <td class="p-2 font-bold text-slate-900">${esc(x.name)}</td>
+            <td class="p-2">${esc(x.ageSex)}</td>
+            <td class="p-2 text-center space-x-1">
+              <button class="bg-blue-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">Load</button>
+              <button class="bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">Delete</button>
+            </td>`;
+          const [b1, b2] = tr.querySelectorAll('button');
+          b1.onclick = () => loadRecord(x.labNo);
+          b2.onclick = () => deleteRecord(x.labNo);
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-red-600">Records लोड भएन। इन्टरनेट जाँच गर्नुहोस्।</td></tr>';
+      }
+    }
+
+    async function loadRecord(labNo) {
+      try {
+        const r = await api('get', { labNo: String(labNo) });
+        if (r.ok) {
+          $('reportForm').reset();
+          for (const k in r.data) {
+            const el = $(k);
+            if (el) { el.value = r.data[k]; checkAbnormal(el); }
+          }
+        } else { alert('Record भेटिएन।'); return; }
+      } catch (err) { alert('Load failed: इन्टरनेट जाँच गर्नुहोस्।'); return; }
+      toggleRecordsModal();
+    }
+
+    async function deleteRecord(labNo) {
+      if (!confirm(`के Lab No: ${labNo} हटाउन चाहनुहुन्छ?`)) return;
+      try { await api('delete', { labNo: String(labNo) }); } catch (err) { alert('Delete failed.'); }
+      renderRecords();
     }
   </script>
 
